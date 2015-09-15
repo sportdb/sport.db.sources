@@ -15,7 +15,7 @@ from all over the world online in plain text.
 
 Example:
 
-´´´
+```
 Round 1
 [May 25]
 Vasco da Gama   1-0 Portuguesa
@@ -38,7 +38,7 @@ Cruzeiro        5-0 Goiás
  [Diego Souza 5', Bruno Rodrigo 30', Nílton 40',79', Borges 42']
 Coritiba        2-1 Atlético/MG
  [Deivid 53', Arthur 90'+1'; Diego Tardelli 51']
-´´´
+```
 
 [Find out more about the Rec.Sport.Soccer Statistics Foundation (RSSSF) »](http://www.rsssf.com)
 
@@ -50,14 +50,14 @@ Coritiba        2-1 Atlético/MG
 
 To fetch pages from the world wide web use:
 
-´´´ ruby
+``` ruby
 page = RsssfPage.from_url( 'http://www.rsssf.com/tablese/eng2015.html')
-´´´
+```
 
-Note: The ´RsssfPageFetcher´ will convert the rsssf archive page
+Note: The `RsssfPageFetcher` will convert the rsssf archive page
 from hypertext (HTML) to plain text e.g.
 
-´´´
+```
 <hr>
 <a href="#premier">Premier League</A><br>
 <a href="#cups">Cup Tournaments</A><br>
@@ -74,11 +74,11 @@ Final Table:
  2.Manchester City         38  24  7  7  83-38  79
  3.Arsenal                 38  22  9  7  71-36  75
 ...
-´´´
+```
 
 will become
 
-´´´
+```
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ‹Premier League›
 ‹Cup Tournaments›
@@ -97,7 +97,7 @@ Final Table:
  2.Manchester City         38  24  7  7  83-38  79
  3.Arsenal                 38  22  9  7  71-36  75
 ...
-´´´
+```
 
 
 ### Working with Repos
@@ -108,31 +108,31 @@ Step 1: List all archive pages
 
 In the ´tables/config.yml´ list all archive pages to fetch. Example:
 
-´´´ yaml
+``` yaml
 2010-11: tablese/eng2011.html
 2011-12: tablese/eng2012.html
 2012-13: tablese/eng2013.html
 2013-14: tablese/eng2014.html
 2014-15: tablese/eng2015.html
-´´´
+```
 
 Step 2: Fetch all archive pages
 
 Use:
 
-´´´ ruby
+``` ruby
 repo = RsssfRepo.new( './eng-england', title: 'England (and Wales)' )
 repo.fetch_pages
-´´´
+```
 
-To create a summary of all pages fetched (e.g. authors, last_updated, sections, etc.).
+Bonus: To create a summary of all pages fetched (e.g. authors, last_updated, sections, etc.).
 Use:
 
-´´´ ruby
+``` ruby
 repo.make_pages_report
-´´´
+```
 
-Example - ´tables/README.md´:
+Example - `tables/README.md`:
 
 
 football.db RSSSF Archive Data Summary for England (and Wales)
@@ -155,10 +155,10 @@ That's it.
 
 To import match schedules (fixtures and results) and more using the football.db machinery
 prepare "simple" single league (or cup) pages with standings tables etc. stripped out.
-For example, to break-out the Premier League and FA Cup from the ´eng2015.txt´
+For example, to break-out the Premier League and FA Cup from the `eng2015.txt`
 archive page use:
 
-´´´ ruby
+``` ruby
 page = RsssfPage.from_url( 'http://www.rsssf.com/tablese/eng2015.html')
 
 schedule = page.find_schedule( header: 'Premier League')      ## returns RsssfSchedule obj
@@ -166,7 +166,7 @@ schedule.save( './1-premierleague.txt' )
 
 schedule = page.find_schedule( header: 'FA Cup', cup: true )  ## returns RsssfSchedule obj
 schedule.save( './facup.txt' )
-´´´
+```
 
 
 
@@ -182,11 +182,11 @@ Just install the gem:
 
 See the rsssf github org for pre-processed ready-to-import datasets. Prepared repos include:
 
-- [´eng-england´](https://github.com/rsssf/eng-england)    - rsssf archive data for England - Premier League, Championship, FA Cup etc.
-- [´de-deutschland´](https://github.com/rsssf/de-deutschland) - rsssf archive data for Germany (Deutschland) - Deutsche Bundesliga, 2. Bundesliga, 3. Liga, DFB Pokal etc.
-- [´es-espana´](https://github.com/rsssf/es-espana)      - rsssf archive data for España (Spain) - Primera División / La Liga, Copa de Rey, etc.
-- [´at-austria´](https://github.com/rsssf/at-austria)     - rsssf archive data for Austria (Österreich) - Österr. Bundesliga, Erste Liga, ÖFB Pokal etc.
-- [´br-brazil´](https://github.com/rsssf/br-brazil)      - rsssf archive data for Brazil (Brasil) - Campeonato Brasileiro Série A / Brasileirão etc.
+- [`eng-england`](https://github.com/rsssf/eng-england)    - rsssf archive data for England - Premier League, Championship, FA Cup etc.
+- [`de-deutschland`](https://github.com/rsssf/de-deutschland) - rsssf archive data for Germany (Deutschland) - Deutsche Bundesliga, 2. Bundesliga, 3. Liga, DFB Pokal etc.
+- [`es-espana`](https://github.com/rsssf/es-espana)      - rsssf archive data for España (Spain) - Primera División / La Liga, Copa de Rey, etc.
+- [`at-austria`](https://github.com/rsssf/at-austria)     - rsssf archive data for Austria (Österreich) - Österr. Bundesliga, Erste Liga, ÖFB Pokal etc.
+- [`br-brazil`](https://github.com/rsssf/br-brazil)      - rsssf archive data for Brazil (Brasil) - Campeonato Brasileiro Série A / Brasileirão etc.
 - and more
 
 
