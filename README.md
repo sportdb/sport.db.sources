@@ -1,7 +1,7 @@
 # rsssf - tools 'n' scripts for RSSSF (Rec.Sport.Soccer Statistics Foundation) archive data
 
 
-* home  :: [github.com/sportdb/rsssf](https://github.com/sportdb/mrhyde)
+* home  :: [github.com/sportdb/rsssf](https://github.com/sportdb/rsssf)
 * bugs  :: [github.com/sportdb/rsssf/issues](https://github.com/sportdb/rsssf/issues)
 * gem   :: [rubygems.org/gems/rsssf](https://rubygems.org/gems/rsssf)
 * rdoc  :: [rubydoc.info/gems/rsssf](http://rubydoc.info/gems/rsssf)

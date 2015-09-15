@@ -3,4 +3,15 @@ Manifest.txt
 README.md
 Rakefile
 lib/rsssf.rb
+lib/rsssf/fetch.rb
+lib/rsssf/html2txt.rb
+lib/rsssf/page.rb
+lib/rsssf/patch.rb
+lib/rsssf/repo.rb
+lib/rsssf/reports/page.rb
+lib/rsssf/reports/schedule.rb
+lib/rsssf/schedule.rb
+lib/rsssf/utils.rb
 lib/rsssf/version.rb
+test/helper.rb
+test/test_utils.rb
