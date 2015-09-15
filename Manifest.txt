@@ -1,0 +1,6 @@
+HISTORY.md
+Manifest.txt
+README.md
+Rakefile
+lib/rsssf.rb
+lib/rsssf/version.rb
