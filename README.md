@@ -106,7 +106,7 @@ To fetch pages from the world wide web for many seasons in batch setup and use a
 
 Step 1: List all archive pages
 
-In the ´tables/config.yml´ list all archive pages to fetch. Example:
+In the `tables/config.yml` list all archive pages to fetch. Example:
 
 ``` yaml
 2010-11: tablese/eng2011.html
@@ -161,10 +161,10 @@ archive page use:
 ``` ruby
 page = RsssfPage.from_url( 'http://www.rsssf.com/tablese/eng2015.html')
 
-schedule = page.find_schedule( header: 'Premier League')      ## returns RsssfSchedule obj
+schedule = page.find_schedule( header: 'Premier League')   ## returns RsssfSchedule obj
 schedule.save( './1-premierleague.txt' )
 
-schedule = page.find_schedule( header: 'FA Cup', cup: true )  ## returns RsssfSchedule obj
+schedule = page.find_schedule( header: 'FA Cup', cup: true )
 schedule.save( './facup.txt' )
 ```
 
