@@ -8,14 +8,14 @@ Hoe.spec 'rsssf' do
   self.summary = "rsssf - tools 'n' scripts for RSSSF (Rec.Sport.Soccer Statistics Foundation) archive data"
   self.description = summary
 
-  self.urls    = ['https://github.com/sportdb/rsssf']
+  self.urls    = ['https://github.com/sportdb/sport.db.sources']
 
   self.author  = 'Gerald Bauer'
   self.email   = 'opensport@googlegroups.com'
 
   # switch extension to .markdown for gihub formatting
   self.readme_file  = 'README.md'
-  self.history_file = 'HISTORY.md'
+  self.history_file = 'CHANGELOG.md'
 
   self.extra_deps = [
     ['logutils'],
@@ -26,7 +26,7 @@ Hoe.spec 'rsssf' do
   self.licenses = ['Public Domain']
 
   self.spec_extras = {
-    required_ruby_version: '>= 1.9.2'
+    required_ruby_version: '>= 2.2.2'
   }
 
 end
