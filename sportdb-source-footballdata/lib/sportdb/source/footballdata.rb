@@ -1,13 +1,10 @@
-# encoding: utf-8
-
-
 
 ## 3rd party libs / gems
 require 'fetcher'
 
 ## sportdb libs / gems
-require 'sportdb/match/formats'   # quick hack for now - missing as dependency? check - why? why not
-require 'sportdb/import'
+require 'sportdb/importers'
+
 
 ###
 # our own code
