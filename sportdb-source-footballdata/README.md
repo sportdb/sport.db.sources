@@ -53,9 +53,12 @@ The top football leagues include 25 seasons back to 1993/94
 and get at least updated twice weekly
 (Sunday nights and Wednesday nights).
 
+
 ## Usage
 
-Let's download all datasets (about 570+) for offline usage into the `./dl` directory:
+Let's download all datasets (about 570+) for offline usage into the
+default web cache directory (that is, `~/.cache/www.football-data.co.uk`):
+
 
 ``` ruby
 require 'sportdb/source/footballdata'
@@ -66,7 +69,7 @@ Footballdata.download
 Stand back ten feet. Resulting in:
 
 ```
-./dl
+~/.cache/www.football-data.co.uk
 │   ARG.csv
 │   AUT.csv
 │   BRA.csv
@@ -84,7 +87,7 @@ Stand back ten feet. Resulting in:
 │   SWZ.csv
 │   USA.csv
 │
-├───1993-94
+├───9394
 │       D1.csv
 │       D2.csv
 │       E0.csv
@@ -96,7 +99,7 @@ Stand back ten feet. Resulting in:
 │       N1.csv
 │       SP1.csv
 │
-├───1994-95
+├───9495
 │       D1.csv
 │       D2.csv
 │       E0.csv
@@ -113,7 +116,7 @@ Stand back ten feet. Resulting in:
 │       SP1.csv
 │       T1.csv
 ...
-├───2018-19
+├───1819
 │       B1.csv
 │       D1.csv
 │       D2.csv
@@ -137,7 +140,7 @@ Stand back ten feet. Resulting in:
 │       SP2.csv
 │       T1.csv
 │
-└───2019-20
+└───1920
         B1.csv
         D1.csv
         D2.csv
@@ -161,9 +164,10 @@ Stand back ten feet. Resulting in:
 
 The football datasets come in two flavors / formats.
 The main leagues use season-by-season datafiles.
-For example, `E0.csv`, `E1.csv`, `E2.csv`, `E3.csv` & `E4.csv` in the `2019-20`
+For example, `E0.csv`, `E1.csv`, `E2.csv`, `E3.csv` & `E4.csv` in the `1920`
 season directory hold the matches for the English Premiership & Divs 1, 2, 3 & Conference;
-`D1.csv` & `D2.csv` for the Bundesligas 1 & 2 and so on.
+`D1.csv` & `D2.csv` for the Bundesligas 1 & 2 and so on
+for the 2019/20 season.
 
 The extra leagues use an all-seasons-in-one datafile.
 For example, `ARG.csv`
@@ -178,10 +182,10 @@ Note: The datasets character encoding gets converted from
 Less is More?
 
 You can download datasets for selected countries only. Pass in
-the country keys as symbols. Let's download only England (`eng`)'s leagues:
+the country keys. Let's download only England (`eng`)'s leagues:
 
 ``` ruby
-Footballdata.download( :eng )
+Footballdata.download( 'eng' )
 ```
 
 Or let's download only the top five leagues, that is,
@@ -189,10 +193,11 @@ England (`eng`), Spain (`es`), Germany (`de`), France (`fr`)
 and Italy (`it`):
 
 ``` ruby
-Footballdata.download( :eng, :es, :de, :fr, :it )
+Footballdata.download( 'eng', 'es', 'de', 'fr', 'it' )
 ```
 
-Now what? Let's import all football datasets (in the `./dl` directory)
+
+Now what? Let's import all football datasets from the web cache
 into an SQL database.
 
 

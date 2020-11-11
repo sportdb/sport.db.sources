@@ -36,3 +36,4 @@ build/
 
 ## add dl folder used for testing downloads (fetching datasets)
 /dl/
+o/

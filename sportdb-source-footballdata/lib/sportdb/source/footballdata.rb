@@ -1,6 +1,6 @@
 
 ## 3rd party libs / gems
-require 'fetcher'
+require 'webget'
 
 ## sportdb libs / gems
 require 'sportdb/importers'
@@ -11,7 +11,7 @@ require 'sportdb/importers'
 require 'sportdb/source/footballdata/version' # let version always go first
 
 require 'sportdb/source/footballdata/config'
-require 'sportdb/source/footballdata/fetch'
+require 'sportdb/source/footballdata/download'
 require 'sportdb/source/footballdata/convert'
 
 
@@ -20,13 +20,13 @@ require 'sportdb/source/footballdata/convert'
 module Footballdata
 
 
-def self.fetch( *args, dir: './dl', start: nil )   ## fetch all datasets (all leagues, all seasons)
-
-  country_keys = args  ## countries to include / fetch - optinal
+def self.download( *country_keys, start: nil )   ## download all datasets (all leagues, all seasons)
+  ## note: always downcase and symbolize keys (thus, allow strings too for now)
+  country_keys = country_keys.map {|key| key.downcase.to_sym }
 
   FOOTBALLDATA_SOURCES.each do |country_key, country_sources|
     if country_keys.empty? || country_keys.include?( country_key )
-      Footballdata.fetch_season_by_season( country_sources, dir: dir, start: start )
+      Footballdata.download_season_by_season( country_sources, start: start )
     else
       ## skipping country
     end
@@ -34,12 +34,39 @@ def self.fetch( *args, dir: './dl', start: nil )   ## fetch all datasets (all le
 
   FOOTBALLDATA_SOURCES_II.each do |country_key, country_basename|
     if country_keys.empty? || country_keys.include?( country_key )
-      Footballdata.fetch_all_seasons( country_basename, dir: dir )
+      Footballdata.download_all_seasons( country_basename )
     else
       ## skipping country
     end
   end
 end  ## method fetch
+
+
+
+def self.convert( *country_keys, start: nil, normalize: false )   ## download all datasets (all leagues, all seasons)
+  ## note: always downcase and symbolize keys (thus, allow strings too for now)
+  country_keys = country_keys.map {|key| key.downcase.to_sym }
+
+  FOOTBALLDATA_SOURCES.each do |country_key, country_sources|
+    if country_keys.empty? || country_keys.include?( country_key )
+      Footballdata.convert_season_by_season( country_key,
+                                             country_sources,
+                                             start: start,
+                                             normalize: normalize )
+    else
+      ## skipping country
+    end
+  end
+
+  FOOTBALLDATA_SOURCES_II.each do |country_key, country_basename|
+    if country_keys.empty? || country_keys.include?( country_key )
+      Footballdata.convert_all_seasons( country_basename )
+    else
+      ## skipping country
+    end
+  end
+end  ## method fetch
+
 
 
 
@@ -65,7 +92,6 @@ def self.import( *args, dir: './dl' )
 end # method import
 
 class << self
-  alias_method :download, :fetch   ## add alias for fetch   ## todo: check if default kwarg dir gets set too
   alias_method :load,     :import
 end
 

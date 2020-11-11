@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 
 ## todo/fix: move CsvMatchWriter to its own file!!!!!
 class CsvMatchWriter
@@ -63,14 +61,14 @@ class CsvMatchWriter
       values << match.team1
 
       if match.score1 && match.score2
-        values << match.score_str
+        values << "#{match.score1}-#{match.score2}"
       else
         # no (or incomplete) full time score; add empty
         values << '?'
       end
 
       if match.score1i && match.score2i
-        values << match.scorei_str
+        values << "#{match.score1i}-#{match.score2i}"
       else
         # no (or incomplete) half time score; add empty
         values << '?'
@@ -95,34 +93,43 @@ module Footballdata
 ## todo/fix: add fix_date converter to CsvReader !!!!!
 
 
-
 def self.convert_season_by_season( country_key, sources,
-                                   in_dir:,
-                                   out_dir:,
                                    start: nil,
                                    normalize: false )
 
-  sources.each do |rec|
-    season_key   = rec[0]   ## note: dirname is season e.g. 2011-12 etc.
-    basenames    = rec[1]   ## e.g. E1,E2,etc.
+  download_base  = "http://www.football-data.co.uk/mmz4281"
 
-    if start && SeasonUtils.start_year( season_key ) < SeasonUtils.start_year( start )
-      puts "skip #{season_key} before #{start}"
+  start = Season.parse( start )   if start  ## convert to season obj
+
+
+  out_dir = './o'
+
+
+  sources.each do |rec|
+    season     = Season.parse( rec[0] )   ## note: dirname is season e.g. 2011-12 etc.
+    basenames  = rec[1]   ## e.g. E1,E2,etc.
+
+    if start && season < start
+      puts "skipping #{season} before #{start}"
       next
     end
 
     basenames.each do |basename|
+      # build short format e.g. 2008/09 becomes 0809 etc
+      season_path = "%02d%02d" % [season.start_year % 100, season.end_year % 100]
+      url = "#{download_base}/#{season_path}/#{basename}.csv"
 
-      in_path = "#{in_dir}/#{season_key}/#{basename}.csv"
+      puts " url: >#{url}<"
+      txt = Webcache.read( url )
 
       league_key = FOOTBALLDATA_LEAGUES[basename]
       league_basename = league_key   ## e.g.: eng.1, fr.1, fr.2 etc.
 
-      out_path = "#{out_dir}/#{SeasonUtils.directory(season_key)}/#{league_basename}.csv"
+      out_path = "#{out_dir}/#{season.to_path}/#{league_basename}.csv"
 
-      puts "in_path: #{in_path}, out_path: #{out_path}"
+      puts "out_path: #{out_path}"
 
-      matches = SportDb::CsvMatchParser.read( in_path )
+      matches = SportDb::CsvMatchParser.parse( txt )
       puts "#{matches.size} matches"
       exit 1   if matches.size == 0   ## make sure parse works (don't ignore empty reads)
 

@@ -20,9 +20,9 @@ Hoe.spec 'sportdb-source-footballdata' do
   self.licenses = ['Public Domain']
 
   self.extra_deps = [
-    ['fetcher',          '>= 0.4.5'],
-    ['footballdb-clubs', '>= 2020.3.30'],
-    ['sportdb-import',   '>= 0.2.4'],
+    ['webget',            '>= 0.2.1'],
+    ['footballdb-clubs',  '>= 2020.9.15'],
+    ['sportdb-importers', '>= 1.1.1'],
   ]
 
   self.spec_extras = {

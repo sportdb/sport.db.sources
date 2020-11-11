@@ -1,6 +1,14 @@
 # Notes
 
 
+## Alternative Packages / Libraries
+
+- <https://github.com/irsooti/football-data-scraper> - TypeScript (JavaScript)
+
+
+
+
+
 ## Mapping of CSV Fields
 
 See <https://www.football-data.co.uk/notes.txt> for the official list.
@@ -33,7 +41,7 @@ Note: Not all datafiles follow the key. The real usage is:
  "HTAG"=>488 }
 ```
 
-e.g. 
+e.g.
 - `HomeTeam` is `Home` in 16 datafiles and `HT` in 5
 - `AwayTeam` is `Away` in 16 datafiles and `AT` in 5
 - ...
