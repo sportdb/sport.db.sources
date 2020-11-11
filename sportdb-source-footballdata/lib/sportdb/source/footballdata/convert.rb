@@ -94,10 +94,8 @@ module Footballdata
 
 
 def self.convert_season_by_season( country_key, sources,
-                                   start: nil,
-                                   normalize: false )
-
-  download_base  = "http://www.football-data.co.uk/mmz4281"
+                                     start: nil,
+                                     normalize: false )
 
   start = Season.parse( start )   if start  ## convert to season obj
 
@@ -115,12 +113,11 @@ def self.convert_season_by_season( country_key, sources,
     end
 
     basenames.each do |basename|
-      # build short format e.g. 2008/09 becomes 0809 etc
-      season_path = "%02d%02d" % [season.start_year % 100, season.end_year % 100]
-      url = "#{download_base}/#{season_path}/#{basename}.csv"
+      url = season_by_season_url( basename, season )
 
-      puts " url: >#{url}<"
-      txt = Webcache.read( url )
+      ## hack: find a better/easier helper method - why? why not?
+      in_path = "#{Webcache.root}/#{Webcache::DiskCache.new.url_to_path( url )}"
+      puts " url: >#{url}<, in_path: >#{in_path}<"
 
       league_key = FOOTBALLDATA_LEAGUES[basename]
       league_basename = league_key   ## e.g.: eng.1, fr.1, fr.2 etc.
@@ -129,7 +126,7 @@ def self.convert_season_by_season( country_key, sources,
 
       puts "out_path: #{out_path}"
 
-      matches = SportDb::CsvMatchParser.parse( txt )
+      matches = SportDb::CsvMatchParser.read( in_path )
       puts "#{matches.size} matches"
       exit 1   if matches.size == 0   ## make sure parse works (don't ignore empty reads)
 
@@ -144,29 +141,35 @@ end # method convert_season_by_season
 
 
 def self.convert_all_seasons( country_key, basename,
-                                   in_dir:,
-                                   out_dir:,
                                    start: nil,
                                    normalize: false )
 
-  col  = 'Season'
-  path = "#{in_dir}/#{basename}.csv"
+  start = Season.parse( start )   if start  ## convert to season obj
 
-  season_keys = SportDb::CsvMatchParser.find_seasons( path, col: col )
+  out_dir = './o'
+
+  url = all_seasons_url( basename )
+
+  ## hack: find a better/easier helper method - why? why not?
+  in_path = "#{Webcache.root}/#{Webcache::DiskCache.new.url_to_path( url )}"
+  puts " url: >#{url}<, in_path: >#{in_path}<"
+
+  col  = 'Season'
+  season_keys = SportDb::CsvMatchParser.find_seasons( in_path, col: col )
   pp season_keys
 
   ## todo/check: make sure timezones entry for country_key exists!!! what results with nil/24.0 ??
   fix_date_converter = ->(row) { fix_date( row, FOOTBALLDATA_TIMEZONES[country_key]/24.0 ) }
 
   season_keys.each do |season_key|
-
-    if start && SeasonUtils.start_year( season_key ) < SeasonUtils.start_year( start )
-      puts "skip #{season_key} before #{start}"
+    season = Season.parse( season_key )
+    if start && season < start
+      puts "skipping #{season} before #{start}"
       next
     end
 
-    matches = SportDb::CsvMatchParser.read( path, filters: { col => season_key },
-                                              converters: fix_date_converter )
+    matches = SportDb::CsvMatchParser.read( in_path, filters: { col => season_key },
+                                                     converters: fix_date_converter )
 
     pp matches[0..2]
     pp matches.size
@@ -174,7 +177,7 @@ def self.convert_all_seasons( country_key, basename,
     ## note: assume (always) first level league for now
     league_basename = "#{country_key}.1"    ## e.g.: ar.1, at.1, mx.1, us.1, etc.
 
-    out_path = "#{out_dir}/#{SeasonUtils.directory(season_key)}/#{league_basename}.csv"
+    out_path = "#{out_dir}/#{season.to_path}/#{league_basename}.csv"
 
     normalize_clubs( matches, country_key )  if normalize
 

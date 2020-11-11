@@ -60,7 +60,10 @@ def self.convert( *country_keys, start: nil, normalize: false )   ## download al
 
   FOOTBALLDATA_SOURCES_II.each do |country_key, country_basename|
     if country_keys.empty? || country_keys.include?( country_key )
-      Footballdata.convert_all_seasons( country_basename )
+      Footballdata.convert_all_seasons( country_key,
+                                        country_basename,
+                                        start: start,
+                                        normalize: normalize )
     else
       ## skipping country
     end

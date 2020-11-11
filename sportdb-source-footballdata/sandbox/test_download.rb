@@ -12,9 +12,12 @@ puts
 # Footballdata.download_all_seasons( 'AUT' )   ## format ii - all-seasons-in-one-datafile
 
 # Footballdata.download
-# Footballdata.download( 'eng', start: '2020/21' )
-Footballdata.convert( 'eng', start: '2020/21' )
+Footballdata.download( 'de', start: '2019/20' )
+Footballdata.download( 'mx' )
 
+
+Footballdata.convert( 'de', start: '2019/20' )
+Footballdata.convert( 'mx', start: '2019/20' )
 
 puts "bye"
 

@@ -1,9 +1,24 @@
 module Footballdata
 
 
-def self.download_season_by_season( sources, start: nil )   ## format i - one datafile per season
-  download_base  = "http://www.football-data.co.uk/mmz4281"
+BASE_URL = 'http://www.football-data.co.uk'
 
+def self.season_by_season_url( basename, season )
+  # build short format e.g. 2008/09 becomes 0809
+  #                         2019/20 becomes 1920 etc.
+  season_path = "%02d%02d" % [season.start_year % 100, season.end_year % 100]
+  # note: add "magic" mmz4281/ directory to base_url
+  "#{BASE_URL}/mmz4281/#{season_path}/#{basename}.csv"
+end
+
+def self.all_seasons_url( basename )
+  # note: add new/ directory  to base_url
+  "#{BASE_URL}/new/#{basename}.csv"
+end
+
+
+
+def self.download_season_by_season( sources, start: nil )   ## format i - one datafile per season
   start = Season.parse( start )   if start  ## convert to season obj
 
   sources.each do |rec|
@@ -16,25 +31,18 @@ def self.download_season_by_season( sources, start: nil )   ## format i - one da
     end
 
     basenames.each do |basename|
-      # build short format e.g. 2008/09 becomes 0809 etc
-      season_path = "%02d%02d" % [season.start_year % 100, season.end_year % 100]
-      url = "#{download_base}/#{season_path}/#{basename}.csv"
-
-      puts " url: >#{url}<"
+      url = season_by_season_url( basename, season )
       get( url )
     end
   end
 end
 
-
 def self.download_all_seasons( basename )   ## format ii - all-seasons-in-one-datafile
-  download_base  = "http://www.football-data.co.uk/new"
-
-  url  = "#{download_base}/#{basename}.csv"
-
-  puts " url: >#{url}<"
+  url = all_seasons_url( basename )
   get( url )
 end
+
+
 
 #############
 # helpers
