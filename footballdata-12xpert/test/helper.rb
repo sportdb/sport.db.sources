@@ -7,4 +7,4 @@ require 'minitest/autorun'
 
 ## our own code
 
-require 'sportdb/source/footballdata'
+require 'footballdata/12xpert'

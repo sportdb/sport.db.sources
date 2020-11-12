@@ -1,0 +1,13 @@
+CHANGELOG.md
+Manifest.txt
+README.md
+Rakefile
+lib/footballdata-12xpert.rb
+lib/footballdata-12xpert/config.rb
+lib/footballdata-12xpert/convert.rb
+lib/footballdata-12xpert/download.rb
+lib/footballdata-12xpert/version.rb
+lib/footballdata/12xpert.rb
+test/helper.rb
+test/test_download.rb
+test/test_import.rb

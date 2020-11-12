@@ -1,16 +1,17 @@
-# sportdb-source-footballdata - download & import 22+ top football leagues from 25 seasons back to 1993/94 from Joseph Buchdahl's Football Data website (football-data.co.uk) up and running since 2001 (and updated twice a week)
+# footballdata-12xpert - download, convert & import 22+ top football leagues from 25 seasons back to 1993/94 from Joseph Buchdahl (12Xpert)'s Football Data website (football-data.co.uk) up and running since 2001 (and updated twice a week)
 
 
 * home  :: [github.com/sportdb/sport.db.sources](https://github.com/sportdb/sport.db.sources)
 * bugs  :: [github.com/sportdb/sport.db.sources/issues](https://github.com/sportdb/sport.db.sources/issues)
-* gem   :: [rubygems.org/gems/sportdb-source-footballdata](https://rubygems.org/gems/sportdb-source-footballdata)
-* rdoc  :: [rubydoc.info/gems/sportdb-source-footballdata](http://rubydoc.info/gems/sportdb-source-footballdata)
+* gem   :: [rubygems.org/gems/footballdata-12xpert](https://rubygems.org/gems/footballdata-12xpert)
+* rdoc  :: [rubydoc.info/gems/footballdata-12xpert](http://rubydoc.info/gems/footballdata-12xpert)
 * forum :: [opensport](http://groups.google.com/group/opensport)
+
 
 
 ## What's Joseph Buchdahl's Football Data?
 
-[Joseph Buchdahl](https://twitter.com/12Xpert) has been publishing football data
+[Joseph Buchdahl (12Xpert)](https://twitter.com/12Xpert) has been publishing football data
 at the [`football-data.co.uk`](https://www.football-data.co.uk/data.php) website
 in the world's most popular tabular data interchange format in text, that is,
 comma-separated value (.csv) records for (bulk) download (and offline usage) since 2001 (!).
@@ -61,10 +62,16 @@ default web cache directory (that is, `~/.cache/www.football-data.co.uk`):
 
 
 ``` ruby
-require 'sportdb/source/footballdata'
+require 'footballdata/12xpert'
 
-Footballdata.download
+Footballdata12xpert.download
 ```
+
+Note: You can use `Footballdata12Xpert`,
+`Footballdata_12xpert`, or `Footballdata_12Xpert`
+as alternate alias names for `Footballdata12xpert`.
+
+
 
 Stand back ten feet. Resulting in:
 
@@ -286,9 +293,21 @@ That's it. Enjoy the beautiful game.
 
 
 
+## Installation
+
+Use
+
+    gem install footballdata-12xpert
+
+or add to your Gemfile
+
+    gem 'footballdata-12xpert'
+
+
+
 ## License
 
-The `sportdb-source-footballdata` scripts are dedicated to the public domain.
+The `footballdata-12xpert` scripts are dedicated to the public domain.
 Use it as you please with no restrictions whatsoever.
 
 

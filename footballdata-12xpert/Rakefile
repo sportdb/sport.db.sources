@@ -1,0 +1,31 @@
+require 'hoe'
+require './lib/footballdata-12xpert/version.rb'
+
+Hoe.spec 'footballdata-12xpert' do
+
+  self.version = Footballdata12xpert::VERSION
+
+  self.summary = "footballdata-12xpert - download, convert & import 22+ top football leagues from 25 seasons back to 1993/94 from Joseph Buchdahl (12Xpert)'s Football Data website (football-data.co.uk) up and running since 2001 (and updated twice a week)"
+  self.description = summary
+
+  self.urls = { home: 'https://github.com/sportdb/sport.db.sources'}
+
+  self.author = 'Gerald Bauer'
+  self.email  = 'opensport@googlegroups.com'
+
+  # switch extension to .markdown for gihub formatting
+  self.readme_file  = 'README.md'
+  self.history_file = 'CHANGELOG.md'
+
+  self.licenses = ['Public Domain']
+
+  self.extra_deps = [
+    ['webget',            '>= 0.2.1'],
+    ['footballdb-clubs',  '>= 2020.9.15'],
+    ['sportdb-importers', '>= 1.1.1'],
+  ]
+
+  self.spec_extras = {
+   required_ruby_version: '>= 2.2.2'
+  }
+end
