@@ -1,25 +1,28 @@
 $LOAD_PATH.unshift( "./lib" )
-require 'sportdb/source/footballdata'
+require 'footballdata/12xpert'
 
-pp FOOTBALLDATA_SOURCES
-# Footballdata.download_season_by_season( FOOTBALLDATA_SOURCES[:eng] )
+pp Footballdata12xpert::SOURCES_I
+pp Footballdata12xpert::SOURCES_II
+
+ENG = Footballdata12xpert::SOURCES_I[:eng]
+__END__
+
+# Footballdata12xpert.download_season_by_season( ENG )
 
 
 puts
-# Footballdata.download_season_by_season( FOOTBALLDATA_SOURCES[:eng], start: '2019/20' )
+# Footballdata12xpert.download_season_by_season( ENG, start: '2019/20' )
 
 
-# Footballdata.download_all_seasons( 'AUT' )   ## format ii - all-seasons-in-one-datafile
+# Footballdata12xpert.download_all_seasons( 'AUT' )   ## format ii - all-seasons-in-one-datafile
 
-# Footballdata.download
-Footballdata.download( 'de', start: '2019/20' )
-Footballdata.download( 'mx' )
+# Footballdata12xpert.download
+Footballdata12xpert.download( 'de', start: '2019/20' )
+Footballdata12xpert.download( 'mx' )
 
 
-Footballdata.convert( 'de', start: '2019/20' )
-Footballdata.convert( 'mx', start: '2019/20' )
+Footballdata12xpert.convert( 'de', start: '2019/20' )
+Footballdata12xpert.convert( 'mx', start: '2019/20' )
 
 puts "bye"
-
-
 
