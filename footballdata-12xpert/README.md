@@ -214,6 +214,7 @@ Now what? Let's convert all football datasets from the web cache
 to the one-line, one-record "standard" [Football.CSV format](https://github.com/footballcsv).
 Example:
 
+
 ``` ruby
 require 'footballdata/12xpert'
 
@@ -224,7 +225,104 @@ Stand back ten feet. Resulting in:
 
 ```
 ./o
+├───1993-94
+│       de.1.csv
+│       de.2.csv
+│       eng.1.csv
+│       eng.2.csv
+│       eng.3.csv
+│       eng.4.csv
+│       es.1.csv
+│       fr.1.csv
+│       it.1.csv
+│       nl.1.csv
+│
+├───1994-95
+│       de.1.csv
+│       de.2.csv
+│       eng.1.csv
+│       eng.2.csv
+│       eng.3.csv
+│       eng.4.csv
+│       es.1.csv
+│       fr.1.csv
+│       gr.1.csv
+│       it.1.csv
+│       nl.1.csv
+│       pt.1.csv
+│       sco.1.csv
+│       sco.2.csv
+│       tr.1.csv
+...
+├───2020
+│       ar.1.csv
+│       br.1.csv
+│       cn.1.csv
+│       fi.1.csv
+│       ie.1.csv
+│       jp.1.csv
+│       no.1.csv
+│       se.1.csv
+│       us.1.csv
+│
+└───2020-21
+        at.1.csv
+        be.1.csv
+        ch.1.csv
+        de.1.csv
+        de.2.csv
+        dk.1.csv
+        eng.1.csv
+        eng.2.csv
+        eng.3.csv
+        eng.4.csv
+        eng.5.csv
+        es.1.csv
+        es.2.csv
 ```
+
+Note: By default all datasets get written into the `./o`
+directory.  Use `Footballdata12xpert.config.convert.out_dir`
+to change the output directory.
+
+The English Premier League (`eng.1`) results in `./o/2020-21/eng.1.csv`:
+
+```
+Date,Team 1,FT,HT,Team 2
+Sat Sep 12 2020,Fulham,0-3,0-1,Arsenal
+Sat Sep 12 2020,Crystal Palace,1-0,1-0,Southampton
+Sat Sep 12 2020,Liverpool,4-3,3-2,Leeds
+Sat Sep 12 2020,West Ham,0-2,0-0,Newcastle
+Sun Sep 13 2020,West Brom,0-3,0-0,Leicester
+Sun Sep 13 2020,Tottenham,0-1,0-0,Everton
+Mon Sep 14 2020,Brighton,1-3,0-1,Chelsea
+Mon Sep 14 2020,Sheffield United,0-2,0-2,Wolves
+Sat Sep 19 2020,Everton,5-2,2-1,West Brom
+Sat Sep 19 2020,Leeds,4-3,2-1,Fulham
+Sat Sep 19 2020,Man United,1-3,0-1,Crystal Palace
+...
+```
+
+Or the Brasileirão (`br.1`) in  `./o/2020/br.1.csv`:
+
+```
+Date,Team 1,FT,HT,Team 2
+Sat Aug 8 2020,Fortaleza,0-2,?,Athletico-PR
+Sat Aug 8 2020,Coritiba,0-1,?,Internacional
+Sat Aug 8 2020,Sport Recife,3-2,?,Ceara
+Sun Aug 9 2020,Flamengo RJ,0-1,?,Atletico-MG
+Sun Aug 9 2020,Santos,1-1,?,Bragantino
+Sun Aug 9 2020,Gremio,1-0,?,Fluminense
+Wed Aug 12 2020,Athletico-PR,2-1,?,Goias
+Wed Aug 12 2020,Atletico-MG,3-2,?,Corinthians
+Wed Aug 12 2020,Bragantino,1-1,?,Botafogo RJ
+Wed Aug 12 2020,Atletico GO,3-0,?,Flamengo RJ
+Wed Aug 12 2020,Bahia,1-0,?,Coritiba
+...
+```
+
+and so on.
+
 
 Less is More?
 
@@ -250,7 +348,6 @@ Footballdata12xpert.convert( 'eng', 'es', 'de', 'fr', 'it', start: '2019/20' )
 ```
 
 
-
 ### Import
 
 Now what? Let's import all football datasets from the web cache
@@ -264,7 +361,7 @@ SportDb.connect( adapter:  'sqlite3',
 SportDb.create_all   ## build database schema / tables
 
 
-Footballdata.import
+Footballdata12xpert.import
 ```
 
 Note: Depending on your computing processing power the import might take
@@ -276,18 +373,18 @@ Done. Let's try some database (SQL) queries (using the sport.db ActiveRecord mod
 ``` ruby
 ## ActiveRecord model (convenience) shortcuts
 Team   = SportDb::Model::Team
-Game   = SportDb::Model::Game
+Match  = SportDb::Model::Match
 League = SportDb::Model::League
 Event  = SportDb::Model::Event
 
 
-## Let's query for some stats  - How many teams? How many games / matches? etc.
+## Let's query for some stats  - How many teams? How many matches? etc.
 
 puts Team.count   #=> 1143
 # SELECT COUNT(*) FROM teams
 
-puts Game.count   #=> 227_142
-# SELECT COUNT(*) FROM games
+puts Match.count   #=> 227_142
+# SELECT COUNT(*) FROM matches
 
 puts League.count  #=> 38
 # SELECT COUNT(*) FROM leagues
@@ -299,41 +396,41 @@ club names by country.
 ``` ruby
 ## Let's query for the Real Madrid football club from Spain
 
-madrid = Team.find_by( title: 'Real Madrid' )
-# SELECT * FROM teams WHERE title = 'Real Madrid' LIMIT 1
+madrid = Team.find_by( name: 'Real Madrid' )
+# SELECT * FROM teams WHERE name = 'Real Madrid' LIMIT 1
 
-puts madrid.games.count   #=> 1023
-# SELECT COUNT(*) FROM games WHERE (team1_id = 380 or team2_id = 380)
-g = madrid.games.first
-# SELECT * FROM "games" WHERE (team1_id = 380 or team2_id = 380) LIMIT 1
+puts madrid.matches.count   #=> 1023
+# SELECT COUNT(*) FROM matches WHERE (team1_id = 380 or team2_id = 380)
+m = madrid.matches.first
+# SELECT * FROM matches WHERE (team1_id = 380 or team2_id = 380) LIMIT 1
 
-puts g.team1.title #=> CA Osasuna
-puts g.team2.title #=> Real Madrid
-puts g.score_str   #=> 1 - 4
+puts m.team1.name #=> CA Osasuna
+puts m.team2.name #=> Real Madrid
+puts m.score_str   #=> 1 - 4
 
 
 ## Or let's query for the Liverpool football club from England
 
-liverpool = Team.find_by( title: 'Liverpool FC' )
+liverpool = Team.find_by( name: 'Liverpool FC' )
 
-puts liverpool.games.count  #=> 1025
+puts liverpool.matches.count  #=> 1025
 
-g = liverpool.games.first
-puts g.team1.title  #=> Liverpool FC
-puts g.team2.title  #=> Sheffield Wednesday FC
-puts g.score_str    #=> 2 - 0
+m = liverpool.matches.first
+puts m.team1.title  #=> Liverpool FC
+puts m.team2.title  #=> Sheffield Wednesday FC
+puts m.score_str    #=> 2 - 0
 
 
 ## Let's try the English Premier League 2019/20
 
 pl = Event.find_by( key: 'eng.1.2019/20' )
 
-puts pl.games.count  #=> 288
+puts pl.matches.count  #=> 288
 
-g = pl.games.first
-puts g.team1.title  #=> Liverpool FC
-puts g.team2.title  #=> Norwich City FC
-puts g.score_str    #=> 4 - 1
+m = pl.matches.first
+puts m.team1.title  #=> Liverpool FC
+puts m.team2.title  #=> Norwich City FC
+puts m.score_str    #=> 4 - 1
 
 # and so on
 ```

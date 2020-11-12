@@ -85,6 +85,7 @@ class CsvMatchWriter
 end # class CsvMatchWriter
 
 
+
 module Footballdata12xpert
 
 ##
@@ -123,10 +124,6 @@ def self.convert_season_by_season( country_key, sources, start: nil )
 
   start = Season.parse( start )   if start  ## convert to season obj
 
-
-  out_dir = './o'
-
-
   sources.each do |rec|
     season     = Season.parse( rec[0] )   ## note: dirname is season e.g. 2011-12 etc.
     basenames  = rec[1]   ## e.g. E1,E2,etc.
@@ -146,7 +143,7 @@ def self.convert_season_by_season( country_key, sources, start: nil )
       league_key = LEAGUES[basename]
       league_basename = league_key   ## e.g.: eng.1, fr.1, fr.2 etc.
 
-      out_path = "#{out_dir}/#{season.to_path}/#{league_basename}.csv"
+      out_path = "#{config.convert.out_dir}/#{season.to_path}/#{league_basename}.csv"
 
       puts "out_path: #{out_path}"
 
@@ -166,7 +163,6 @@ def self.convert_all_seasons( country_key, basename, start: nil )
 
   start = Season.parse( start )   if start  ## convert to season obj
 
-  out_dir = './o'
 
   url = all_seasons_url( basename )
 
@@ -197,7 +193,7 @@ def self.convert_all_seasons( country_key, basename, start: nil )
     ## note: assume (always) first level league for now
     league_basename = "#{country_key}.1"    ## e.g.: ar.1, at.1, mx.1, us.1, etc.
 
-    out_path = "#{out_dir}/#{season.to_path}/#{league_basename}.csv"
+    out_path = "#{config.convert.out_dir}/#{season.to_path}/#{league_basename}.csv"
 
     CsvMatchWriter.write( out_path, matches )
   end
