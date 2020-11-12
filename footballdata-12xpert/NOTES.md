@@ -3,8 +3,30 @@
 
 ## Alternative Packages / Libraries
 
-- <https://github.com/irsooti/football-data-scraper> - TypeScript (JavaScript)
+**JavaScript**
 
+- <https://github.com/irsooti/football-data-scraper> - TypeScript (JavaScript) by Daniele Irsuti
+  - <https://www.npmjs.com/package/@irsooti/football-data-scraper>
+
+**Ruby**
+
+- <https://rubygems.org/gems/kickme> - download data from football data uk
+  - <https://github.com/sunrick/kickme> by Rickard Sundén
+
+**Python**
+
+- <https://github.com/olalidmark/football-data> by Ola Lidmark Eriksson
+  - <https://github.com/olalidmark/football-data/blob/master/fbdata/fbdata.py>
+
+<!-- break -->
+
+- <https://pypi.org/project/footballdata>
+  - <https://github.com/skagr/footballdata> by Skag Rijsdijk
+    - <https://github.com/skagr/footballdata/blob/master/footballdata/MatchHistory.py>
+
+**C#**
+
+- <https://github.com/Garand-Gary/Football-Data.co.uk>
 
 
 

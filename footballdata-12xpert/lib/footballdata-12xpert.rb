@@ -14,127 +14,11 @@ require 'footballdata-12xpert/version' # let version always go first
 require 'footballdata-12xpert/config'
 require 'footballdata-12xpert/download'
 require 'footballdata-12xpert/convert'
-
-###
-##  add alternate aliases - why? why not?
-Footballdata12Xpert   = Footballdata12xpert
-Footballdata_12xpert  = Footballdata12xpert
-Footballdata_12Xpert  = Footballdata12xpert
-
+require 'footballdata-12xpert/import'
 
 
 
 module Footballdata12xpert
-
-
-def self.import( *args, dir: './dl' )
-
-  country_keys = args  ## countries to include / fetch - optinal
-
-  FOOTBALLDATA_SOURCES.each do |country_key, country_sources|
-    if country_keys.empty? || country_keys.include?( country_key )
-      Footballdata.import_season_by_season( country_key, country_sources, dir: dir )
-    else
-      ## skipping country
-    end
-  end
-
-  FOOTBALLDATA_SOURCES_II.each do |country_key, country_basename|
-    if country_keys.empty? || country_keys.include?( country_key )
-      Footballdata.import_all_seasons( country_key, country_basename, dir: dir )
-    else
-      ## skipping country
-    end
-  end
-end # method import
-
-class << self
-  alias_method :load,     :import
-end
-
-
-
-def self.import_season_by_season( country_key, sources, dir: )
-
-  ## todo/check: make sure timezones entry for country_key exists!!! what results with nil/24.0 ??
-  fix_date_converter = ->(row) { fix_date( row, FOOTBALLDATA_TIMEZONES[country_key]/24.0 ) }
-
-  sources.each do |rec|
-    season_key  = rec[0]   ## note: dirname is season_key e.g. 2011-12 etc.
-    basenames  = rec[1]   ## e.g. E1,E2,etc.
-
-    basenames.each do |basename|
-
-      path = "#{dir}/#{season_key}/#{basename}.csv"
-
-      league_key = FOOTBALLDATA_LEAGUES[basename]  ## e.g.: eng.1, fr.1, fr.2 etc.
-      if league_key.nil?
-        puts "** !!! ERROR !!! league key missing for >#{basename}<; sorry - please add"
-        exit 1
-      end
-
-      country, league = find_or_create_country_and_league( league_key )
-
-      season = SportDb::Importer::Season.find_or_create_builtin( season_key )
-
-      puts "path: #{path}"
-
-      matches = CsvMatchReader.read( path, converters: fix_date_converter )
-
-      update_matches_txt( matches,
-                            league:  league,
-                            season:  season )
-    end
-  end
-end  # method import_season_by_season
-
-
-
-def self.import_all_seasons( country_key, basename, dir: )
-
-  col  = 'Season'
-  path = "#{dir}/#{basename}.csv"
-
-  season_keys = CsvMatchSplitter.find_seasons( path, col: col )
-  pp season_keys
-
-  ## note: assume always first level/tier league for now
-  league_key = "#{country_key}.1"
-  country, league = find_or_create_country_and_league( league_key )
-
-  ## todo/check: make sure timezones entry for country_key exists!!! what results with nil/24.0 ??
-  fix_date_converter = ->(row) { fix_date( row, FOOTBALLDATA_TIMEZONES[country_key]/24.0 ) }
-
-  season_keys.each do |season_key|
-    season = SportDb::Importer::Season.find_or_create_builtin( season_key )
-
-    matches = CsvMatchReader.read( path, filters: { col => season_key },
-                                         converters: fix_date_converter )
-
-    pp matches[0..2]
-    pp matches.size
-
-    update_matches_txt( matches,
-                          league:  league,
-                          season:  season )
-  end
-end  # method import_all_seasons
-
-
-###
-## helper for country and league db record
-def self.find_or_create_country_and_league( league_key )
-  country_key, level = league_key.split( '.' )
-  country = SportDb::Importer::Country.find_or_create_builtin!( country_key )
-
-  league_auto_name = "#{country.name} #{level}"   ## "fallback" auto-generated league name
-  pp league_auto_name
-  league = SportDb::Importer::League.find_or_create( league_key,
-                                                       name:       league_auto_name,
-                                                       country_id: country.id )
-
-  [country, league]
-end
 
 ## helper to fix dates to use local timezone (and not utc/london time)
 def self.fix_date( row, offset )
@@ -159,10 +43,15 @@ def self.fix_date( row, offset )
   row   ## return row for possible pipelining - why? why not?
 end
 
-
-
 end ## module Footballdata12xpert
 
+
+
+###
+##  add alternate aliases - why? why not?
+Footballdata12Xpert   = Footballdata12xpert
+Footballdata_12xpert  = Footballdata12xpert
+Footballdata_12Xpert  = Footballdata12xpert
 
 
 puts Footballdata12xpert.banner   # say hello

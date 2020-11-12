@@ -211,7 +211,7 @@ Footballdata12xpert.download( 'eng', 'es', 'de', 'fr', 'it' )
 ### Convert
 
 Now what? Let's convert all football datasets from the web cache
-to the one-line, one-record "standard" [Football.CSV format](https://github.com/footballcsv).
+to the one-line, one-match & one-file, one-season "standard" [Football.CSV format](https://github.com/footballcsv).
 Example:
 
 
@@ -350,8 +350,13 @@ Footballdata12xpert.convert( 'eng', 'es', 'de', 'fr', 'it', start: '2019/20' )
 
 ### Import
 
-Now what? Let's import all football datasets from the web cache
-into an SQL database.
+Now what? Let's import all (converted) football datasets
+in the one-line, one-match & one-file, one-season "standard"
+Football.CSV format into an SQL database.
+
+Note: By default all datasets get read in from the `./o`
+output directory.  Use `Footballdata12xpert.config.convert.out_dir`
+to change the output directory.
 
 
 ``` ruby
@@ -416,9 +421,9 @@ liverpool = Team.find_by( name: 'Liverpool FC' )
 puts liverpool.matches.count  #=> 1025
 
 m = liverpool.matches.first
-puts m.team1.title  #=> Liverpool FC
-puts m.team2.title  #=> Sheffield Wednesday FC
-puts m.score_str    #=> 2 - 0
+puts m.team1.name  #=> Liverpool FC
+puts m.team2.name  #=> Sheffield Wednesday FC
+puts m.score_str   #=> 2 - 0
 
 
 ## Let's try the English Premier League 2019/20
@@ -428,9 +433,9 @@ pl = Event.find_by( key: 'eng.1.2019/20' )
 puts pl.matches.count  #=> 288
 
 m = pl.matches.first
-puts m.team1.title  #=> Liverpool FC
-puts m.team2.title  #=> Norwich City FC
-puts m.score_str    #=> 4 - 1
+puts m.team1.name  #=> Liverpool FC
+puts m.team2.name  #=> Norwich City FC
+puts m.score_str   #=> 4 - 1
 
 # and so on
 ```

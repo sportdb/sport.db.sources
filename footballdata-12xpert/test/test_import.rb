@@ -19,15 +19,15 @@ class TestImport < MiniTest::Test
 
 
   def test_import_at
-    Footballdata.import( :at, dir: './dl'  )
+    Footballdata12xpert.import( 'at' )
   end
 
   def test_import_eng
-    Footballdata.import( :eng, dir: './dl')
+    Footballdata12xpert.import( 'eng', start: '2020/21' )
   end
 
-  def test_import_all
-     Footballdata.import( dir: './dl' )
+  def xxx_test_import_all     ## note: test disabled for now
+     Footballdata12xpert.import
   end
 
 end # class TestImport
