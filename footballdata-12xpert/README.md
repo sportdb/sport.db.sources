@@ -57,6 +57,11 @@ and get at least updated twice weekly
 
 ## Usage
 
+[Download](#download) • [Convert](#convert) • [Import](#import)
+
+
+### Download
+
 Let's download all datasets (about 570+) for offline usage into the
 default web cache directory (that is, `~/.cache/www.football-data.co.uk`):
 
@@ -94,7 +99,7 @@ Stand back ten feet. Resulting in:
 │   SWZ.csv
 │   USA.csv
 │
-├───9394
+├───9394      # 1993/94 season by season main top leagues
 │       D1.csv
 │       D2.csv
 │       E0.csv
@@ -106,7 +111,7 @@ Stand back ten feet. Resulting in:
 │       N1.csv
 │       SP1.csv
 │
-├───9495
+├───9495      # 1994/95 season by season main top leagues
 │       D1.csv
 │       D2.csv
 │       E0.csv
@@ -123,7 +128,7 @@ Stand back ten feet. Resulting in:
 │       SP1.csv
 │       T1.csv
 ...
-├───1819
+├───1920      # 2019/20 season by season main top leagues
 │       B1.csv
 │       D1.csv
 │       D2.csv
@@ -147,7 +152,7 @@ Stand back ten feet. Resulting in:
 │       SP2.csv
 │       T1.csv
 │
-└───1920
+└───2021      # 2020/21 season by season main top leagues
         B1.csv
         D1.csv
         D2.csv
@@ -171,10 +176,10 @@ Stand back ten feet. Resulting in:
 
 The football datasets come in two flavors / formats.
 The main leagues use season-by-season datafiles.
-For example, `E0.csv`, `E1.csv`, `E2.csv`, `E3.csv` & `E4.csv` in the `1920`
+For example, `E0.csv`, `E1.csv`, `E2.csv`, `E3.csv` & `E4.csv` in the `2021`
 season directory hold the matches for the English Premiership & Divs 1, 2, 3 & Conference;
 `D1.csv` & `D2.csv` for the Bundesligas 1 & 2 and so on
-for the 2019/20 season.
+for the 2020/21 season.
 
 The extra leagues use an all-seasons-in-one datafile.
 For example, `ARG.csv`
@@ -192,7 +197,7 @@ You can download datasets for selected countries only. Pass in
 the country keys. Let's download only England (`eng`)'s leagues:
 
 ``` ruby
-Footballdata.download( 'eng' )
+Footballdata12xpert.download( 'eng' )
 ```
 
 Or let's download only the top five leagues, that is,
@@ -200,9 +205,53 @@ England (`eng`), Spain (`es`), Germany (`de`), France (`fr`)
 and Italy (`it`):
 
 ``` ruby
-Footballdata.download( 'eng', 'es', 'de', 'fr', 'it' )
+Footballdata12xpert.download( 'eng', 'es', 'de', 'fr', 'it' )
 ```
 
+### Convert
+
+Now what? Let's convert all football datasets from the web cache
+to the one-line, one-record "standard" [Football.CSV format](https://github.com/footballcsv).
+Example:
+
+``` ruby
+require 'footballdata/12xpert'
+
+Footballdata12xpert.convert
+```
+
+Stand back ten feet. Resulting in:
+
+```
+./o
+```
+
+Less is More?
+
+You can convert datasets for selected countries only. Pass in
+the country keys. Let's download only England (`eng`)'s leagues:
+
+``` ruby
+Footballdata12xpert.convert( 'eng' )
+```
+
+Or let's convert only the top five leagues, that is,
+England (`eng`), Spain (`es`), Germany (`de`), France (`fr`)
+and Italy (`it`):
+
+``` ruby
+Footballdata12xpert.convert( 'eng', 'es', 'de', 'fr', 'it' )
+```
+
+Or let's convert only the top five leagues starting from the 2019/20 season on:
+
+``` ruby
+Footballdata12xpert.convert( 'eng', 'es', 'de', 'fr', 'it', start: '2019/20' )
+```
+
+
+
+### Import
 
 Now what? Let's import all football datasets from the web cache
 into an SQL database.
