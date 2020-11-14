@@ -30,6 +30,31 @@
 
 
 
+##  Todos
+
+fix with mods(?) ambigious club names e.g.
+
+- Extremadura   in Spain
+
+```
+** !!! ERROR - too many matches (2) for club >Extremadura<:
+[#<Sports::Club:0x5148720
+  @alt_names=["Extremadura"],
+  @alt_names_auto=[],
+  @city="Almendralejo",
+  @geos=["Extremadura"],
+  @name="CF Extremadura (-2010)",
+  @year_end=2010>,
+ #<Sports::Club:0x512a900
+  @alt_names=
+   ["Extremadura", "Extremadura Uni\u00F3n Deportiva", "UD Extremadura"],
+  @alt_names_auto=["Extremadura Union Deportiva"],
+  @city="Almendralejo",
+  @geos=["Extremadura"],
+  @name="Extremadura UD">]
+```
+
+
 
 ## Mapping of CSV Fields
 

@@ -22,7 +22,7 @@ Hoe.spec 'footballdata-12xpert' do
   self.extra_deps = [
     ['webget',            '>= 0.2.1'],
     ['footballdb-clubs',  '>= 2020.9.15'],
-    ['sportdb-importers', '>= 1.1.1'],
+    ['sportdb-importers', '>= 1.2.0'],
   ]
 
   self.spec_extras = {

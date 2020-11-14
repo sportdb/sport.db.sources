@@ -7,14 +7,16 @@ def self.import( *country_keys, start: nil )
 
   ## fix/todo:  filter by country keys and start sesason to be (re)done
 
-  ## todo/fix:  use/add normalize: true  option!!!!!
+  ## todo/fix:  use/add normalize: true  option - why? why not?
+  ##     - teams get auto-mapped anyway - not needed for import!!!!!
 
-  dir = File.expand_path( config.convert.out_dir )
-  puts "  dir: >#{dir}<"
+  path = File.expand_path( config.convert.out_dir )
+  puts "  path: >#{path}<"
 
-  # SportDb.read_csv( dir )
-  ##  todo/fix: use SportDb Csv Package or such???
-  puts "import to be (re)done; sorry"
+  pack = SportDb::DirPackage.new( path )
+  pack.read_csv( start: start )
+
+  ## puts "import to be (re)done; sorry"
 end # method import
 
 
