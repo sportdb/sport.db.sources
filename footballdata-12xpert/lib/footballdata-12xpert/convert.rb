@@ -12,6 +12,16 @@ class CsvMatchWriter
     ##  keep file same on windows and unix
     ##   not working really with universal 
     ## out = File.new( path, 'w:utf-8', universal: true )
+    ##
+    ##   note -  that ^M and \r are the same.
+    ##
+    ## todo/fix - use a string buffer (buf)
+    ##  and than use 
+    ##    str.gsub( /\r\n?/, "\n" ) 
+    ##
+    ##  retry with some later year
+    ##   plus check if write_text in cocos is using universal newline or such?
+
     out = File.new( path, 'w:utf-8' )
 
 
