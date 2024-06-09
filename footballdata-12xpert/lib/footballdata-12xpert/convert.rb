@@ -8,7 +8,12 @@ class CsvMatchWriter
     FileUtils.mkdir_p( File.dirname( path) )  unless Dir.exist?( File.dirname( path ))
 
 
+    ## try with universal newline support (only use \n and not \r\n)
+    ##  keep file same on windows and unix
+    ##   not working really with universal 
+    ## out = File.new( path, 'w:utf-8', universal: true )
     out = File.new( path, 'w:utf-8' )
+
 
     headers = [
       'Date',
@@ -91,7 +96,8 @@ module Footballdata12xpert
 ##
 ## todo/fix: add fix_date converter to CsvReader !!!!!
 
-def self.convert( *country_keys, start: nil )
+def self.convert( *country_keys, start: nil, 
+                                 stop:  nil )
   ## note: always downcase and symbolize keys (thus, allow strings too for now)
   country_keys = country_keys.map {|key| key.downcase.to_sym }
 
@@ -99,7 +105,8 @@ def self.convert( *country_keys, start: nil )
     if country_keys.empty? || country_keys.include?( country_key )
       convert_season_by_season( country_key,
                                 country_sources,
-                                  start: start )
+                                  start: start,
+                                  stop:  stop )
     else
       ## skipping country
     end
@@ -109,7 +116,8 @@ def self.convert( *country_keys, start: nil )
     if country_keys.empty? || country_keys.include?( country_key )
       convert_all_seasons( country_key,
                            country_basename,
-                             start: start )
+                             start: start,
+                             stop:  stop )
     else
       ## skipping country
     end
@@ -120,16 +128,24 @@ end  ## method convert
 ###
 # private helpers / machinery
 
-def self.convert_season_by_season( country_key, sources, start: nil )
+def self.convert_season_by_season( country_key, sources,
+                                        start: nil,
+                                        stop:  nil )
 
   start = Season.parse( start )   if start  ## convert to season obj
+  stop  = Season.parse( stop )    if stop
 
   sources.each do |rec|
     season     = Season.parse( rec[0] )   ## note: dirname is season e.g. 2011-12 etc.
     basenames  = rec[1]   ## e.g. E1,E2,etc.
 
     if start && season < start
-      puts "skipping #{season} before #{start}"
+      puts "skipping #{season} before start #{start}"
+      next
+    end
+
+    if stop && season > stop
+      puts " - skipping #{season} after stop #{stop}"
       next
     end
 
@@ -159,9 +175,12 @@ end # method convert_season_by_season
 
 
 
-def self.convert_all_seasons( country_key, basename, start: nil )
+def self.convert_all_seasons( country_key, basename, 
+                                start: nil,
+                                stop:  nil )
 
   start = Season.parse( start )   if start  ## convert to season obj
+  stop  = Season.parse( stop )    if stop    ## convert to season obj
 
 
   url = all_seasons_url( basename )
@@ -180,9 +199,14 @@ def self.convert_all_seasons( country_key, basename, start: nil )
   season_keys.each do |season_key|
     season = Season.parse( season_key )
     if start && season < start
-      puts "skipping #{season} before #{start}"
+      puts "skipping #{season} before start #{start}"
       next
     end
+    if stop && season > stop
+      puts " - skipping #{season} after stop #{stop}"
+      next
+    end
+
 
     matches = SportDb::CsvMatchParser.read( in_path, filters: { col => season_key },
                                                      converters: fix_date_converter )

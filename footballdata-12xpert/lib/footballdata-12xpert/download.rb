@@ -27,7 +27,10 @@ end  ## method download
 ###
 # private helpers / machinery
 
-BASE_URL = 'http://www.football-data.co.uk'
+## note:
+##  switch base_url to https!!!
+##    http no longer supported!!!
+BASE_URL = 'https://www.football-data.co.uk'
 
 def self.season_by_season_url( basename, season )
   # build short format e.g. 2008/09 becomes 0809
