@@ -4,27 +4,6 @@ class CsvMatchWriter
 
   def self.write( path, matches )
 
-    ## for convenience - make sure parent folders/directories exist
-    FileUtils.mkdir_p( File.dirname( path) )  unless Dir.exist?( File.dirname( path ))
-
-
-    ## try with universal newline support (only use \n and not \r\n)
-    ##  keep file same on windows and unix
-    ##   not working really with universal 
-    ## out = File.new( path, 'w:utf-8', universal: true )
-    ##
-    ##   note -  that ^M and \r are the same.
-    ##
-    ## todo/fix - use a string buffer (buf)
-    ##  and than use 
-    ##    str.gsub( /\r\n?/, "\n" ) 
-    ##
-    ##  retry with some later year
-    ##   plus check if write_text in cocos is using universal newline or such?
-
-    out = File.new( path, 'w:utf-8' )
-
-
     headers = [
       'Date',
       'Team 1',
@@ -33,8 +12,11 @@ class CsvMatchWriter
       'Team 2'
     ]
 
-    out << headers.join(',')   ## e.g. Date,Team 1,FT,HT,Team 2
-    out << "\n"
+
+    ## note - write to (string/memory) buffer first
+    buf = String.new
+    buf << headers.join(',')   ## e.g. Date,Team 1,FT,HT,Team 2
+    buf << "\n"
 
 
     matches.each_with_index do |match,i|
@@ -91,12 +73,48 @@ class CsvMatchWriter
 
       values << match.team2
 
-      out << values.join( ',' )
-      out << "\n"
+      buf << values.join( ',' )
+      buf << "\n"
     end
 
-    out.close
-  end
+
+ 
+    ## for convenience - make sure parent folders/directories exist
+    FileUtils.mkdir_p( File.dirname( path) )  unless Dir.exist?( File.dirname( path ))
+
+    puts
+    puts "==> #{path}..."
+    puts buf
+
+    ## try with universal newline support (only use \n and not \r\n)
+    ##  keep file same on windows and unix
+    ##   not working really with universal 
+    ## out = File.new( path, 'w:utf-8', universal: true )
+    ##
+    ##   note -  that ^M and \r are the same.
+    ##
+    ## todo/fix - use a string buffer (buf)
+    ##  and than use 
+    ##    str.gsub( /\r\n?/, "\n" ) 
+    ##
+    ##  retry with some later year
+    ##   plus check if write_text in cocos is using universal newline or such?
+
+    ## write as binary (to avoid windows new line issue/ auto-conversion??)
+    ##   "b"  Binary file mode
+    ##    Suppresses EOL <-> CRLF conversion on Windows. And
+    ## File.open( path, 'wb' ) do |f|
+    ##  change to binary - why? why not?
+    ##
+    #  for git diff/config always use - why? why not?
+    #
+    # git config --global core.autocrlf false
+    # git config --global core.eol lf
+  
+    File.open( path, 'w:utf-8' ) do |f| 
+      f.write( buf )
+    end
+  end  # method self.write
 end # class CsvMatchWriter
 
 

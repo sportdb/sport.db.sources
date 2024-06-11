@@ -1,6 +1,47 @@
 # Notes
 
 
+## Data Changes / Fixes in 2024 
+
+what changed in 2024 (last update was 2020)
+
+```
+1994/95 - eng.4
+  match result fix -
+- Thu May 4 1995,Bury,0-2,?,Walsall
++ Thu May 4 1995,Bury,0-0,?,Walsall
+
+club renames
+in at 
+  Rapid Vienna => SK Rapid
+in ro
+  FC Steaua Bucuresti => FCSB
+in ru
+  FK Krylya Sovetov Samara =>  Krylya Sovetov
+in jp
+  G-Osaka  => Gamba Osaka
+  C-Osaka  => Cerezo Osaka
+  Hiroshima  => Sanfrecce Hiroshima
+  Urawa  => Urawa Reds
+  Kobe  => Vissel Kobe
+  Nagoya =>  Nagoya Grampus
+  Shimizu  =>  Shimizu S-Pulse
+  Sapporo  =>  Hokkaido Consadole Sapporo
+  Yokohama M. => Yokohama F. Marinos
+  Shonan => Shonan Bellmare
+  Oita => Oita Trinita
+  !! Kashima  =>  Kashima Antler    # note - now tow different clubs!!!
+  !! Kashiwa  =>  Kashiwa Reysol  
+in us
+  Montreal Impact  => CF Montreal
+in cn
+  Henan Jianye => Henan Songshan Longmen
+  Tianjin Teda  =>  Tianjin Jinmen Tiger
+
+```
+
+
+
 ## Alternative Packages / Libraries
 
 **JavaScript**
@@ -51,6 +92,38 @@ fix with mods(?) ambigious club names e.g.
   @alt_names_auto=["Extremadura Union Deportiva"],
   @city="Almendralejo",
   @geos=["Extremadura"],
+  @name="Extremadura UD">]
+
+
+** !!! ERROR - too many matches (2) for club >Extremadura<:
+
+[#<Sports::Club:0x00000155550edbb0
+  @alt_names=[],
+  @city="Almendralejo",
+  @code=nil,
+  @country=
+   #<Sports::Country:0x000001555504eec0
+    @alt_names=["España [es]"],
+    @code="ESP",
+    @key="es",
+    @name="Spain",
+    @tags=["fifa", "uefa"]>,
+  @district=nil,
+  @key="cfextremadura(-2010)",
+  @name="CF Extremadura (-2010)">,
+ #<Sports::Club:0x00000155550edb10
+  @alt_names=[],
+  @city="Almendralejo",
+  @code=nil,
+  @country=
+   #<Sports::Country:0x000001555504eec0
+    @alt_names=["España [es]"],
+    @code="ESP",
+    @key="es",
+    @name="Spain",
+    @tags=["fifa", "uefa"]>,
+  @district=nil,
+  @key="extremaduraud",
   @name="Extremadura UD">]
 ```
 

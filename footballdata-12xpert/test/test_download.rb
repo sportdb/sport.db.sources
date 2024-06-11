@@ -3,9 +3,9 @@
 #     ruby -I ./lib -I ./test test/test_download.rb
 
 
-require 'helper'
+require_relative  'helper'
 
-class TestDownload < MiniTest::Test
+class TestDownload < Minitest::Test
 
   def test_sources
     pp Footballdata12xpert::SOURCES_I

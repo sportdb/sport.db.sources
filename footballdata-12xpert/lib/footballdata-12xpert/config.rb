@@ -7,6 +7,13 @@ SOURCES_I =
 ##
 ## see https://www.football-data.co.uk/englandm.php
 ##
+##  Season 2023/2024
+##   - Premier League (FT & HT results; match stats; match, total goals & AH odds)
+##  - Championship (FT & HT results; match stats; match, total goals & AH odds)
+##  - League 1 (FT & HT results; match stats; match, total goals & AH odds)
+##  - League 2 (FT & HT results; match stats; match, total goals & AH odds)
+##  - Conference (FT & HT results; match, total goals & AH odds)
+##  ...
   eng: [[ '2023/24', %w(E0 E1 E2 E3 EC) ],
         [ '2022/23', %w(E0 E1 E2 E3 EC) ],
         [ '2021/22', %w(E0 E1 E2 E3 EC) ],
@@ -485,26 +492,5 @@ TIMEZONES = {
   jp:  +9,     ## Asia/Tokyo
 }
 
-
-  ##################
-  ###  config options / settings
-  class Configuration
-    #########
-    ## nested configuration classes - use - why? why not?
-    class Convert
-       def out_dir()       @out_dir || './o'; end
-       def out_dir=(value) @out_dir = value; end
-    end
-
-   def convert()  @convert ||= Convert.new; end
-  end # class Configuration
-
-  ## lets you use
-  ##   Footballdata12xpert.configure do |config|
-  ##      config.convert.out_dir = './o'
-  ##   end
-
-  def self.configure()  yield( config ); end
-  def self.config()  @config ||= Configuration.new;  end
 end # module Footballdata12xpert
 

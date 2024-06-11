@@ -9,12 +9,39 @@ require 'sportdb/importers'
 
 ###
 # our own code
-require 'footballdata-12xpert/version' # let version always go first
+require_relative 'footballdata-12xpert/version' # let version always go first
+require_relative 'footballdata-12xpert/config'
 
-require 'footballdata-12xpert/config'
-require 'footballdata-12xpert/download'
-require 'footballdata-12xpert/convert'
-require 'footballdata-12xpert/import'
+
+module Footballdata12xpert
+  ##################
+  ###  config options / settings
+  class Configuration
+    #########
+    ## nested configuration classes - use - why? why not?
+    class Convert
+       def out_dir()       @out_dir || './o'; end
+       def out_dir=(value) @out_dir = value; end
+    end
+
+   def convert()  @convert ||= Convert.new; end
+  end # class Configuration
+
+  ## lets you use
+  ##   Footballdata12xpert.configure do |config|
+  ##      config.convert.out_dir = './o'
+  ##   end
+
+  def self.configure()  yield( config ); end
+  def self.config()  @config ||= Configuration.new;  end  
+end # module Footballdata12xpert
+
+
+
+
+require_relative 'footballdata-12xpert/download'
+require_relative 'footballdata-12xpert/convert'
+require_relative 'footballdata-12xpert/import'
 
 
 

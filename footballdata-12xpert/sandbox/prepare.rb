@@ -14,11 +14,12 @@ pp Webcache.root
 # Footballdata12xpert.download
 
 
-# Footballdata12xpert.config.convert.out_dir = './tmp'
-Footballdata12xpert.config.convert.out_dir = '../../../footballcsv/cache.footballdata'
+Footballdata12xpert.config.convert.out_dir = './tmp'
+# Footballdata12xpert.config.convert.out_dir = '../../../footballcsv/cache.footballdata'
 
 
 # ## step 2 - convert
-Footballdata12xpert.convert( start: '2021' )
+# Footballdata12xpert.convert( start: '2016', stop: '2019' )
+Footballdata12xpert.convert
 
 puts "bye"

@@ -3,9 +3,9 @@
 #     ruby -I ./lib -I ./test test/test_import.rb
 
 
-require 'helper'
+require_relative  'helper'
 
-class TestImport < MiniTest::Test
+class TestImport < Minitest::Test
 
   def setup
     ## SportDb::Import.config.clubs_dir = '../../../openfootball/clubs'
