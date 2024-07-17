@@ -1,4 +1,3 @@
-# encoding: utf-8
 
 module Rsssf
 
@@ -37,12 +36,20 @@ def fetch_pages
   cfg = YAML.load_file( "#{@repo_path}/tables/config.yml") 
   pp cfg
 
-  dl_base = 'http://rsssf.com'
+  ## use www.rsssf.org - why? why not?
+  dl_base = 'https://rsssf.org'
 
-  cfg.each do |k,v|
+  cfg.each do |k,line|
+
+     ## e.g.       tablesb/braz2013.html  --  Windows-1252
+     ##        or  tablesb/braz2014.html  !! Windows-1252
+     values = line.split( /--|!!/ ).map { |value| value.strip }
+     path = values[0]
+
+     encoding = values[1]  ## or nil
+
     ## season = k   # as string e.g. 2011-12  or 2011 etc.
-    path      = v  # as string e.g. tablesd/duit2011.html
-
+  
     ## note: assumes extension is .html
     #    e.g. tablesd/duit2011.html => duit2011
     basename = File.basename( path, '.html' )
@@ -50,10 +57,15 @@ def fetch_pages
     src_url   = "#{dl_base}/#{path}"
     dest_path = "#{@repo_path}/tables/#{basename}.txt"
 
-    page = Page.from_url( src_url )
+    page = if encoding 
+               Page.from_url( src_url, encoding: encoding )
+           else
+               Page.from_url( src_url )
+           end
     page.save( dest_path )
   end # each year
 end # method fetch_pages
+
 
 
 def make_pages_summary

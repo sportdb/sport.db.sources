@@ -1,4 +1,3 @@
-# encoding: utf-8
 
 module Rsssf
 
@@ -6,16 +5,22 @@ class PageFetcher
 
   include Filters   # e.g. html2text, sanitize etc.
 
-
-def initialize
-  @worker = Fetcher::Worker.new
-end
   
-def fetch( src_url )
+def fetch( url, encoding: 'UTF-8' )
 
   ## note: assume plain 7-bit ascii for now
-  ##  -- assume rsssf uses ISO_8859_15 (updated version of ISO_8859_1) -- does NOT use utf-8 character encoding!!!
-  html = @worker.read( src_url )  
+  ##  -- assume rsssf uses ISO_8859_15 (updated version of ISO_8859_1) 
+  ###-- does NOT use utf-8 character encoding!!!
+
+  
+  response = Webget.page( url, encoding: encoding )  ## fetch (and cache) html page (via HTTP GET)
+
+  ## note: exit on get / fetch error - do NOT continue for now - why? why not?
+  exit 1   if response.status.nok?    ## e.g.  HTTP status code != 200
+  
+  puts "html:"
+  html =  response.text( encoding: encoding )    
+  pp html[0..400]
 
   ### todo/fix: first check if html is all ascii-7bit e.g.
   ## includes only chars from 64 to 127!!!
@@ -34,8 +39,9 @@ def fetch( src_url )
   ## note: german umlaut use the same code (int)
   ##    in ISO 3166-1/15 and 2 and Windows CP1562  (other chars ARE different!!!)
 
-  html = html.force_encoding( Encoding::ISO_8859_15 )
-  html = html.encode( Encoding::UTF_8 )    # try conversion to utf-8
+
+  # html = html.force_encoding( Encoding::ISO_8859_15 )
+  # html = html.encode( Encoding::UTF_8 )    # try conversion to utf-8
 
   ## check for html entities
   html = html.gsub( "&auml;", 'ä' )
@@ -64,7 +70,7 @@ def fetch( src_url )
 
   header = <<EOS
 <!--
-   source: #{src_url}
+   source: #{url}
   -->
 
 EOS
@@ -75,6 +81,4 @@ end  ## method fetch
 end  ## class PageFetcher
 end  ## module Rsssf
 
-## add (shortcut) alias
-RsssfPageFetcher = Rsssf::PageFetcher
 

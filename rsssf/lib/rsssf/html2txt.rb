@@ -1,4 +1,3 @@
-# encoding: utf-8
 
 module Rsssf
 module Filters
@@ -150,8 +149,5 @@ end # method sanitize
 
 end # module Filters
 end # module Rsssf
-
-## add (shortcut) alias
-RsssfFilters = Rsssf::Filters
 
 

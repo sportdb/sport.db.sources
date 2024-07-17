@@ -33,3 +33,12 @@ build/
 
 # unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
 .rvmrc
+
+
+
+###
+#  add (web) local cache and tmp and o(utput) dirs
+cache/
+tmp/
+o/
+

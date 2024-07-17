@@ -1,34 +1,47 @@
-# encoding: utf-8
 
-## stdlibs
-require 'pp'
-require 'yaml'
-require 'uri'
+## 3rd party (our own)
+require 'season/formats'   ## add season support
+require 'webget'           ## incl. webget, webcache, webclient, etc.
+
+require 'cocos'
 
 
-## 3rd party libs
-require 'textutils'      ## used for File.read_utf8 etc.
-require 'fetcher'        ## used for Fetcher::Worker.new.fetch etc.
+## (old) 3rd party libs
+##  require 'textutils'      ## used for File.read_utf8 etc.
+## require 'fetcher'        ## used for Fetcher::Worker.new.fetch etc.
+
 
 
 ## our own code
-require 'rsssf/version'    # note: let version always go first
+require_relative 'rsssf/version'    # note: let version always go first
 
-require 'rsssf/utils'      # include Utils - goes first
-require 'rsssf/html2txt'   # include Filters - goes first
+require_relative 'rsssf/utils'      # include Utils - goes first
+require_relative 'rsssf/html2txt'   # include Filters - goes first
 
-require 'rsssf/fetch'
-require 'rsssf/page'
-require 'rsssf/schedule'
-require 'rsssf/patch'
+require_relative 'rsssf/fetch'
+require_relative 'rsssf/page'
+require_relative 'rsssf/schedule'
+require_relative 'rsssf/patch'
 
-require 'rsssf/reports/schedule'
-require 'rsssf/reports/page'
+require_relative 'rsssf/reports/schedule'
+require_relative 'rsssf/reports/page'
 
-require 'rsssf/repo'
+require_relative 'rsssf/repo'
+
+
+
+
+#############
+## add (shortcut) alias(es)
+RsssfPageStat    = Rsssf::PageStat
+RsssfPage        = Rsssf::Page
+RsssfPageFetcher = Rsssf::PageFetcher
+RsssfFilters     = Rsssf::Filters
+RsssfSchedule    = Rsssf::Schedule
+
 
 
 
 
 ## say hello
-puts Rsssf.banner   if defined?($RUBYLIBS_DEBUG) && $RUBYLIBS_DEBUG
+puts Rsssf.banner   ##  if defined?($RUBYLIBS_DEBUG) && $RUBYLIBS_DEBUG

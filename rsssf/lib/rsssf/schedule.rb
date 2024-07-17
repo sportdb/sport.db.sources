@@ -1,4 +1,3 @@
-# encoding: utf-8
 
 module Rsssf
 
@@ -18,14 +17,8 @@ end
 
 
 def save( path )
-  File.open( path, 'w' ) do |f|
-    f.write @txt
-  end    
+  write_text( path, @txt )
 end
 
 end  ## class Schedule
 end  ## module Rsssf
-
-## add (shortcut) alias
-RsssfSchedule = Rsssf::Schedule
-

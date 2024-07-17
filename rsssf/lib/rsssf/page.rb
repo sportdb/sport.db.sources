@@ -1,4 +1,3 @@
-# encoding: utf-8
 
 
 module Rsssf
@@ -28,19 +27,22 @@ class Page
 
   include Utils   ## e.g. year_from_name, etc.
 
-def self.from_url( src )
-  txt = PageFetcher.new.fetch( src )
-  self.from_string( txt )
+def self.from_url( src, encoding: 'UTF-8' )
+  puts "   using encoding >#{encoding}<"
+
+  txt = PageFetcher.new.fetch( src, encoding: encoding )
+  from_string( txt )
 end
+
 
 
 def self.from_file( path )
-  txt = File.read_utf8( path )  # note: always assume sources (already) converted to utf-8 
-  self.from_string( txt )
+  txt = read_text( path )  # note: always assume sources (already) converted to utf-8 
+  from_string( txt )
 end
 
 def self.from_string( txt )
-  self.new( txt )
+  new( txt )
 end
   
 def initialize( txt )
@@ -61,7 +63,11 @@ CUP_ROUND_REGEX  = /\b(
                       Final
                     )\b/ix
 
-def find_schedule( opts={} )     ## change to build_schedule - why? why not???
+
+
+## make header required - why? why not?                    
+def find_schedule( header: nil, 
+                   cup:    false )     ## change to build_schedule - why? why not???
 
   ## find match schedule/fixtures in multi-league doc
   new_txt = ''
@@ -71,7 +77,6 @@ def find_schedule( opts={} )     ## change to build_schedule - why? why not???
   
   round_count = 0
 
-  header = opts[:header]
   if header
     league_header_found        = false
 
@@ -105,7 +110,7 @@ def find_schedule( opts={} )     ## change to build_schedule - why? why not???
   ## pp header_regex
 
 
-  if opts[:cup]
+  if cup
     round_regex = CUP_ROUND_REGEX   ## note: only allow final, quaterfinals, etc. if knockout cup
   else
     round_regex = LEAGUE_ROUND_REGEX
@@ -279,17 +284,12 @@ end  ## method build_stat
 
 
 def save( path )
-  File.open( path, 'w' ) do |f|
-    f.write @txt
-  end
+  write_text( path, @txt )
 end  ## method save
 
 end  ## class Page
 end  ## module Rsssf
 
 
-## add (shortcut) alias
-RsssfPageStat = Rsssf::PageStat
-RsssfPage     = Rsssf::Page
 
 

@@ -5,16 +5,14 @@
 * bugs  :: [github.com/sportdb/sport.db.sources/issues](https://github.com/sportdb/sport.db.sources/issues)
 * gem   :: [rubygems.org/gems/rsssf](https://rubygems.org/gems/rsssf)
 * rdoc  :: [rubydoc.info/gems/rsssf](http://rubydoc.info/gems/rsssf)
-* forum :: [opensport](http://groups.google.com/group/opensport)
+
 
 
 
 ## What's the Rec.Sport.Soccer Statistics Foundation (RSSSF)?
 
 The RSSSF collects and offers football (soccer) league tables, match results and more
-from all over the world online in plain text.
-
-Example:
+from all over the world online in plain text. Example:
 
 ```
 Round 1

@@ -1,8 +1,9 @@
-# encoding: utf-8
 
-require 'helper'
 
-class TestUtils < MiniTest::Test
+
+require_relative 'helper'
+
+class TestUtils < Minitest::Test
 
   include RsssfUtils    ## e.g. year_from_name etc.
 

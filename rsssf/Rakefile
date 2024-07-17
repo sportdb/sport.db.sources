@@ -8,10 +8,10 @@ Hoe.spec 'rsssf' do
   self.summary = "rsssf - tools 'n' scripts for RSSSF (Rec.Sport.Soccer Statistics Foundation) archive data"
   self.description = summary
 
-  self.urls    = ['https://github.com/sportdb/sport.db.sources']
+  self.urls    = { home: 'https://github.com/sportdb/sport.db.sources' }
 
   self.author  = 'Gerald Bauer'
-  self.email   = 'opensport@googlegroups.com'
+  self.email   = 'gerald.bauer@gmail.com'
 
   # switch extension to .markdown for gihub formatting
   self.readme_file  = 'README.md'
@@ -21,7 +21,9 @@ Hoe.spec 'rsssf' do
     ['logutils'],
     ['textutils'],
     ['fetcher'],
+    ['rsssf-parser'],   ## add rsssf parser machinery & tool
   ]
+
 
   self.licenses = ['Public Domain']
 

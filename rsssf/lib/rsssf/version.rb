@@ -1,10 +1,8 @@
-# encoding: utf-8
-
 
 module Rsssf
 
   MAJOR = 0
-  MINOR = 1
+  MINOR = 2
   PATCH = 0
   VERSION = [MAJOR,MINOR,PATCH].join('.')
 
@@ -13,11 +11,11 @@ module Rsssf
   end
 
   def self.banner
-    "rsssf/#{VERSION} on Ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) [#{RUBY_PLATFORM}]"
+    "rsssf/#{VERSION} on Ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) [#{RUBY_PLATFORM}] in (#{root})"
   end
 
   def self.root
-    "#{File.expand_path( File.dirname(File.dirname(File.dirname(__FILE__))) )}"
+     File.expand_path( File.dirname(File.dirname(File.dirname(__FILE__))) )
   end
 
 end # module Rsssf
