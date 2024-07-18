@@ -5,14 +5,24 @@ class PageFetcher
 
   include Filters   # e.g. html2text, sanitize etc.
 
-  
+
+def read_cache( url )
+  html = Webcache.read( url )
+
+  puts "html:"
+  pp html[0..400]
+
+  html = convert( html, url: url )
+  html
+end   
+
+
+### rename to download - why? why not?
 def fetch( url, encoding: 'UTF-8' )
 
   ## note: assume plain 7-bit ascii for now
   ##  -- assume rsssf uses ISO_8859_15 (updated version of ISO_8859_1) 
   ###-- does NOT use utf-8 character encoding!!!
-
-  
   response = Webget.page( url, encoding: encoding )  ## fetch (and cache) html page (via HTTP GET)
 
   ## note: exit on get / fetch error - do NOT continue for now - why? why not?
@@ -22,6 +32,13 @@ def fetch( url, encoding: 'UTF-8' )
   html =  response.text( encoding: encoding )    
   pp html[0..400]
 
+  html = convert( html, url: url )
+  html
+end
+
+
+
+def convert( html, url: )
   ### todo/fix: first check if html is all ascii-7bit e.g.
   ## includes only chars from 64 to 127!!!
 
@@ -60,7 +77,7 @@ def fetch( url, encoding: 'UTF-8' )
   
   ## check for more entities
   html = html.gsub( /&[^;]+;/) do |match|
-    puts "*** found unencoded html entity #{match}"
+    puts "*** WARN - found unencoded html entity #{match}"
     match   ## pass through as is (1:1)
   end
   ## todo/fix: add more entities

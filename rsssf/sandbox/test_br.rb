@@ -23,9 +23,31 @@ page = RsssfPage.from_url( 'https://rsssf.org/tablesb/braz2011.html',
 page.save( "./o/br2010.txt" )
 =end
 
-## repo = RsssfRepo.new( './tmp/brazil', title: 'Brazil' )
-## repo.fetch_pages
+=begin
+page = RsssfPage.read_cache( 'https://rsssf.org/tablesb/braz2011.html' )
+page.save( "./o/br2010v2.txt" )
 
+page = RsssfPage.read_cache( 'https://rsssf.org/tablesb/braz2024.html' )
+page.save( "./o/br2024v2.txt" )
+=end
+
+repo = RsssfRepo.new( './tmp/brazil', title: 'Brazil' )
+# repo.fetch_pages
+# repo.make_pages_summary
+
+repo.each_page do |season, page|
+   puts "==> #{season}..."
+ 
+   sched = page.find_schedule( header: 'Série A' )
+   ## pp sched
+   sched.save( "./tmp/brazil/#{season.to_path}/1-seriea.txt",
+               header: "= Brazil Série A #{season}\n\n" )
+end
+
+
+
+
+__END__
 ##
 
 # make schedules

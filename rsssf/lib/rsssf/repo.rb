@@ -31,6 +31,36 @@ def initialize( path, opts )   ## pass in title etc.
 end
 
 
+
+
+def each_page( &blk )  ## use each table or such - why? why not?
+  cfg = YAML.load_file( "#{@repo_path}/tables/config.yml") 
+  pp cfg
+
+  cfg.each do |key,line|
+
+    ## e.g.       tablesb/braz2013.html  --  Windows-1252
+    ##        or  tablesb/braz2014.html  !! Windows-1252
+    values = line.split( /--|!!/ ).map { |value| value.strip }
+    path = values[0]
+
+    ## note: assumes extension is .html
+    #    e.g. tablesd/duit2011.html => duit2011
+    basename = File.basename( path, '.html' )
+
+    path = "#{@repo_path}/tables/#{basename}.txt"
+
+     ## convert key to season
+     season = Season( key )
+
+     page = Page.from_file( path )
+
+     blk.call( season, page )
+  end 
+end
+
+
+
 def fetch_pages
   puts "fetch_pages:"
   cfg = YAML.load_file( "#{@repo_path}/tables/config.yml") 
@@ -224,9 +254,5 @@ end  ## sanitize_dir
 end  ## class Repo
 end  ## module Rsssf
 
-## add (shortcut) alias
-RsssfRepo           = Rsssf::Repo
-RsssfScheduleConfig = Rsssf::ScheduleConfig
-RsssfScheduleStat   = Rsssf::ScheduleStat
 
 

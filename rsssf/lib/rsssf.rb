@@ -33,11 +33,15 @@ require_relative 'rsssf/repo'
 
 #############
 ## add (shortcut) alias(es)
-RsssfPageStat    = Rsssf::PageStat
-RsssfPage        = Rsssf::Page
-RsssfPageFetcher = Rsssf::PageFetcher
-RsssfFilters     = Rsssf::Filters
-RsssfSchedule    = Rsssf::Schedule
+RsssfPageStat       = Rsssf::PageStat
+RsssfPage           = Rsssf::Page
+RsssfPageFetcher    = Rsssf::PageFetcher
+RsssfFilters        = Rsssf::Filters
+RsssfSchedule       = Rsssf::Schedule
+
+RsssfRepo           = Rsssf::Repo
+RsssfScheduleConfig = Rsssf::ScheduleConfig
+RsssfScheduleStat   = Rsssf::ScheduleStat
 
 
 

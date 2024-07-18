@@ -27,12 +27,19 @@ class Page
 
   include Utils   ## e.g. year_from_name, etc.
 
-def self.from_url( src, encoding: 'UTF-8' )
+
+def self.from_url( url, encoding: 'UTF-8' )
   puts "   using encoding >#{encoding}<"
 
-  txt = PageFetcher.new.fetch( src, encoding: encoding )
+  txt = PageFetcher.new.fetch( url, encoding: encoding )
   from_string( txt )
 end
+
+def self.read_cache( url )
+  txt =  PageFetcher.new.read_cache( url )  
+  from_string( txt )
+end
+
 
 
 
@@ -94,7 +101,8 @@ def find_schedule( header: nil,
      header_regex = /^
                       ([#]{2,4}\s+(#{header_esc}))
                         |
-                      (\*{2}(#{header_esc})\*{2})
+                      (\*{2}(#{header_esc}))     ## was: \*{2})
+                                                 ##  do not inluce trailing ** for now (allows anchors e.g. §)  
                     /ix
 
     ## todo:
@@ -133,8 +141,10 @@ def find_schedule( header: nil,
       if line =~ header_regex
         puts "!!! bingo - found header >#{line}<"
         league_header_found = true
-        title = line.gsub( /[#*]/, '' ).strip   ##  quick hack: extract title from header
-        new_txt << "## #{title}\n\n"    # note: use header/stage title (regex group capture)
+        
+        ## note - do NOT auto-add header/title !!!
+        # title = line.gsub( /[#*]/, '' ).strip   ##  quick hack: extract title from header
+        # new_txt << "## #{title}\n\n"    # note: use header/stage title (regex group capture)
       else
         puts "  searching for header >#{header}<; skipping line >#{line}<"
         next
@@ -253,7 +263,9 @@ def build_stat
     ## todo: add more patterns? how? why?
     if line =~ /####\s+(.+)/
       puts "  found section >#{$1}<"
-      sections << $1.strip
+      ## remove  anchors first   e.g.   ‹§sa› etc.
+      ##   check if anchors with underscore (_) or dash/hyphen (-) ???
+      sections << $1.sub( /‹§[a-z0-9]+›/, '' ).strip
     end
   end
 
