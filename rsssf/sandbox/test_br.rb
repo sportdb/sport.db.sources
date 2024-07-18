@@ -31,36 +31,30 @@ page = RsssfPage.read_cache( 'https://rsssf.org/tablesb/braz2024.html' )
 page.save( "./o/br2024v2.txt" )
 =end
 
-repo = RsssfRepo.new( './tmp/brazil', title: 'Brazil' )
-# repo.fetch_pages
+## path = './tmp/brazil'
+path = '/sports/rsssf/brazil' 
+
+
+repo = RsssfRepo.new( path, title: 'Brazil' )
+# repo.fetch_pages    # ( stop: '2013' )
+
+## todo/fix - season!!!  
+##   displays 2021-22 etc. should be year only e.g. 2021!!!
+##   remove season !!!!!
+##   sort by number in basename ??
 # repo.make_pages_summary
+
 
 repo.each_page do |season, page|
    puts "==> #{season}..."
  
    sched = page.find_schedule( header: 'Série A' )
    ## pp sched
-   sched.save( "./tmp/brazil/#{season.to_path}/1-seriea.txt",
+   sched.save( "#{repo.root}/#{season.to_path}/1-seriea.txt",
                header: "= Brazil Série A #{season}\n\n" )
 end
 
 
-
-
-__END__
-##
-
-# make schedules
-
-years = [2011,2012,2013,2014,2015,2016]   #,2012]
-years.each do |year|
-
-    page = RsssfPage.from_file( "./tmp/brazil/tables/braz#{year}.txt" )
-
-    sched = page.find_schedule( header: 'Série A' )
-    pp sched
-    sched.save( "./tmp/brazil/#{year}/1-seriea.txt")
-end
 
 
 

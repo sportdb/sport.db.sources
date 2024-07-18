@@ -7,13 +7,23 @@ $LOAD_PATH.unshift( './lib' )
 require 'rsssf'
 
 
-Webcache.root = './cache' 
+
+Webcache.root = '/sports/cache' 
+
+
+## path = './tmp/england'
+path = '/sports/rsssf/england' 
+
+
+repo = RsssfRepo.new( path, title: 'England (and Wales)' )
+# repo.fetch_pages   # stop: '2012/13'
 
 
 
-repo = RsssfRepo.new( './tmp/england', title: 'England (and Wales)' )
-# repo.fetch_pages
-# repo.make_pages_summary
+__END__
+
+
+repo.make_pages_summary
 
 
 repo.each_page do |season, page|
@@ -29,7 +39,7 @@ repo.each_page do |season, page|
 
   sched = page.find_schedule( header: header )
   ## pp sched
-  sched.save( "./tmp/england/#{season.to_path}/1-premierleague.txt",
+  sched.save( "#{repo.root}/#{season.to_path}/1-premierleague.txt",
               header: "= England Premier League #{season}\n\n" )
 end
 

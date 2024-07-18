@@ -25,12 +25,15 @@ class Repo
   include Utils       ## e.g. year_from_file, etc.
 
 
+
 def initialize( path, opts )   ## pass in title etc.
   @repo_path = path
   @opts      = opts
 end
 
 
+def root() @repo_path; end    ## use/rename to path - why? why not?
+alias_method :root_dir, :root
 
 
 def each_page( &blk )  ## use each table or such - why? why not?
@@ -61,7 +64,9 @@ end
 
 
 
-def fetch_pages
+def fetch_pages( start: nil, stop: nil )
+  ## start, stop (season) -- allows to limit processing
+
   puts "fetch_pages:"
   cfg = YAML.load_file( "#{@repo_path}/tables/config.yml") 
   pp cfg
@@ -69,7 +74,12 @@ def fetch_pages
   ## use www.rsssf.org - why? why not?
   dl_base = 'https://rsssf.org'
 
-  cfg.each do |k,line|
+  cfg.each do |key,line|
+
+     season = Season( key )
+     next   if start && season < Season( start )
+     next   if stop  && season > Season( stop )   ## note - will include stop season 
+                                                  ## (stop NOT exclusive but inclusive)
 
      ## e.g.       tablesb/braz2013.html  --  Windows-1252
      ##        or  tablesb/braz2014.html  !! Windows-1252
