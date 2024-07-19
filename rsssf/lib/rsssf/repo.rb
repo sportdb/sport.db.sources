@@ -36,7 +36,26 @@ def root() @repo_path; end    ## use/rename to path - why? why not?
 alias_method :root_dir, :root
 
 
-def each_page( &blk )  ## use each table or such - why? why not?
+
+def each_page( code, seasons, &blk )  ## use each table or such - why? why not?
+ 
+  seasons.each do |season|
+    url = Rsssf.table_url( code, season: season )
+    url_path = URI.parse( url ).path
+    puts "  url = >#{url}<"
+    puts "  url_path = >#{url_path}<"
+    basename = File.basename( url_path, File.extname( url_path ))
+
+    path = "#{@repo_path}/tables/#{basename}.txt"
+     page = Page.read_txt( path )
+    season = Season( season )
+    blk.call( season, page )
+  end
+end
+
+
+
+def each_page_v0( &blk )  ## use each table or such - why? why not?
   cfg = YAML.load_file( "#{@repo_path}/tables/config.yml") 
   pp cfg
 
@@ -61,6 +80,34 @@ def each_page( &blk )  ## use each table or such - why? why not?
      blk.call( season, page )
   end 
 end
+
+
+## for now use single country repos - why? why not?
+##   add support for all-in-one repos
+def prepare_pages( code, seasons )
+  ## start, stop (season) -- allows to limit processing
+
+  seasons.each do |season|
+    url = Rsssf.table_url( code, season: season )
+
+    ## check if not in cache
+    unless Webcache.cached?( url )
+        ## download - if not cached
+        Rsssf.download_table( code, season: season )
+    end
+
+    page = Page.read_cache( url )
+
+    url_path = URI.parse( url ).path
+    puts "  url = >#{url}<"
+    puts "  url_path = >#{url_path}<"
+
+    basename = File.basename( url_path, File.extname( url_path ))
+
+    path = "#{@repo_path}/tables/#{basename}.txt"
+    page.save( path ) 
+  end
+end # method prepare_pages
 
 
 
@@ -113,7 +160,7 @@ def make_pages_summary
 
   files = Dir[ "#{@repo_path}/tables/*.txt" ]
   files.each do |file|
-    page = Page.from_file( file )
+    page = Page.read_txt( file )
     stats << page.build_stat
   end
 

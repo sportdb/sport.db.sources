@@ -173,11 +173,11 @@ schedule.save( './facup.txt' )
 
 See the rsssf github org for pre-processed ready-to-import datasets. Prepared repos include:
 
-- [`eng-england`](https://github.com/rsssf/eng-england)    - rsssf archive data for England - Premier League, Championship, FA Cup etc.
-- [`de-deutschland`](https://github.com/rsssf/de-deutschland) - rsssf archive data for Germany (Deutschland) - Deutsche Bundesliga, 2. Bundesliga, 3. Liga, DFB Pokal etc.
-- [`es-espana`](https://github.com/rsssf/es-espana)      - rsssf archive data for España (Spain) - Primera División / La Liga, Copa de Rey, etc.
-- [`at-austria`](https://github.com/rsssf/at-austria)     - rsssf archive data for Austria (Österreich) - Österr. Bundesliga, Erste Liga, ÖFB Pokal etc.
-- [`br-brazil`](https://github.com/rsssf/br-brazil)      - rsssf archive data for Brazil (Brasil) - Campeonato Brasileiro Série A / Brasileirão etc.
+- [`england`](https://github.com/rsssf/england)    - rsssf archive data for England - Premier League, Championship, FA Cup etc.
+- [`deutschland`](https://github.com/rsssf/deutschland) - rsssf archive data for Germany (Deutschland) - Deutsche Bundesliga, 2. Bundesliga, 3. Liga, DFB Pokal etc.
+- [`espana`](https://github.com/rsssf/espana)      - rsssf archive data for España (Spain) - Primera División / La Liga, Copa de Rey, etc.
+- [`austria`](https://github.com/rsssf/austria)     - rsssf archive data for Austria (Österreich) - Österr. Bundesliga, Erste Liga, ÖFB Pokal etc.
+- [`brazil`](https://github.com/rsssf/brazil)      - rsssf archive data for Brazil (Brasil) - Campeonato Brasileiro Série A / Brasileirão etc.
 - and more
 
 

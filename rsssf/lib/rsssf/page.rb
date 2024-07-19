@@ -27,31 +27,37 @@ class Page
 
   include Utils   ## e.g. year_from_name, etc.
 
-
+=begin
 def self.from_url( url, encoding: 'UTF-8' )
   puts "   using encoding >#{encoding}<"
 
   txt = PageFetcher.new.fetch( url, encoding: encoding )
   from_string( txt )
 end
+=end
 
-def self.read_cache( url )
-  txt =  PageFetcher.new.read_cache( url )  
-  from_string( txt )
-end
+def self.read_cache( url )  ### use read_cache /web/html or such - why? why not?
+  html = Webcache.read( url )
 
+  puts "html:"
+  pp html[0..400]
+ 
+  fetcher = PageFetcher.new
+  txt = fetcher.convert( html, url: url )
+  txt
 
-
-
-def self.from_file( path )
-  txt = read_text( path )  # note: always assume sources (already) converted to utf-8 
-  from_string( txt )
-end
-
-def self.from_string( txt )
   new( txt )
 end
-  
+
+
+
+def self.read_txt( path )  ## use read_txt
+    # note: always assume sources (already) converted from html to txt!!!!
+  txt = read_text( path )  
+  new( txt )
+end
+
+
 def initialize( txt )
   @txt = txt
 end
@@ -72,7 +78,7 @@ CUP_ROUND_REGEX  = /\b(
 
 
 
-## make header required - why? why not?                    
+## make header required - why? why not?
 def find_schedule( header: nil, 
                    cup:    false )     ## change to build_schedule - why? why not???
 

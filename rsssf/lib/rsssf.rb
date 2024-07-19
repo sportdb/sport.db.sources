@@ -24,6 +24,8 @@ require_relative 'rsssf/version'    # note: let version always go first
 require_relative 'rsssf/utils'      # include Utils - goes first
 require_relative 'rsssf/html2txt'   # include Filters - goes first
 
+require_relative 'rsssf/download'
+
 require_relative 'rsssf/fetch'
 require_relative 'rsssf/page'
 require_relative 'rsssf/schedule'

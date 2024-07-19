@@ -10,7 +10,10 @@ $LOAD_PATH.unshift( './lib' )
 require 'rsssf'
 
 
-Webcache.root = './cache' 
+## Webcache.root = './cache' 
+
+Webcache.root = '/sports/cache'   ## use "global" (shared) cache
+
 
 
 ## is utf8 with BOM!!! (content char says otherwise)
@@ -34,16 +37,39 @@ page = RsssfPage.read_cache( 'https://rsssf.org/tablesb/braz2024.html' )
 page.save( "./o/br2024v2.txt" )
 =end
 
-## path = './tmp/brazil'
-path = '/sports/rsssf/brazil' 
+path = './tmp2/brazil'
+## path = '/sports/rsssf/brazil' 
 
 
-repo = RsssfRepo.new( path, title: 'Brazil' )
-# repo.fetch_pages    # ( stop: '2013' )
+repo = RsssfRepo.new( path, title: 'Brazil (Brasil)' )
+
+code    = 'br'
+seasons = Season('2011')..Season('2024')
+# repo.prepare_pages( code, seasons )
 
 repo.make_pages_summary
 
+
+repo.each_page( code, seasons ) do |season,page|
+  puts "==> #{season}..."
+
+  sched = page.find_schedule( header: 'Série A' )
+  ## pp sched
+  sched.save( "#{repo.root}/#{season.to_path}/1-seriea.txt",
+              header: "= Brazil Série A #{season}\n\n" )
+
+end 
+
 repo.make_schedules_summary
+
+
+
+
+__END__
+
+# repo.fetch_pages    # ( stop: '2013' )
+
+
 
 __END__
 

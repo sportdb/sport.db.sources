@@ -1,22 +1,16 @@
 
 module Rsssf
 
+  ######
+  ##
+  ## fix - change to PageConverter !!!!!
+
 class PageFetcher
 
   include Filters   # e.g. html2text, sanitize etc.
 
 
-def read_cache( url )
-  html = Webcache.read( url )
-
-  puts "html:"
-  pp html[0..400]
-
-  html = convert( html, url: url )
-  html
-end   
-
-
+=begin
 ### rename to download - why? why not?
 def fetch( url, encoding: 'UTF-8' )
 
@@ -35,7 +29,7 @@ def fetch( url, encoding: 'UTF-8' )
   html = convert( html, url: url )
   html
 end
-
+=end
 
 
 def convert( html, url: )
