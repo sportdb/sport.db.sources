@@ -42,3 +42,11 @@ cache/
 tmp/
 o/
 
+#########
+### ignore logs and errors
+logs.txt
+error.txt
+
+
+
+

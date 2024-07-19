@@ -2,6 +2,9 @@
 #  to run use:
 #   $ ruby sandbox/test_br.rb
 
+$LOAD_PATH.unshift( '../../sport.db/parser/lib' )
+$LOAD_PATH.unshift( '../../sport.db/parser-rsssf/lib' )
+
 
 $LOAD_PATH.unshift( './lib' )
 require 'rsssf'
@@ -37,6 +40,12 @@ path = '/sports/rsssf/brazil'
 
 repo = RsssfRepo.new( path, title: 'Brazil' )
 # repo.fetch_pages    # ( stop: '2013' )
+
+repo.make_pages_summary
+
+repo.make_schedules_summary
+
+__END__
 
 ## todo/fix - season!!!  
 ##   displays 2021-22 etc. should be year only e.g. 2021!!!

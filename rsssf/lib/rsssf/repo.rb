@@ -118,15 +118,21 @@ def make_pages_summary
   end
 
   ### save report as README.md in tables/ folder in repo
-  report = PageReport.new( stats, @opts )    ## pass in title etc.  
+  report = PageReport.new( stats, title: @opts[:title] )    ## pass in title etc.  
   report.save( "#{@repo_path}/tables/README.md" )
 end  # method make_pages_summary  
 
 
-def make_schedules_summary( stats )   ## note: requires stats to be passed in for now
-  report = ScheduleReport.new( stats, @opts )   ## pass in title etc.
-  report.save( "#{@repo_path}/README.md" )
-end  # method make_schedules_summary
+def make_schedules_summary
+   ## find all match datafiles
+   args = [@repo_path]
+   files = SportDb::Parser::Opts.expand_args( args )
+   pp files   
+   
+   report = ScheduleReport.new( files, title: @opts[:title] )   ## pass in title etc.
+   report.save( "#{@repo_path}/README.md" )
+end  
+
 
 
 

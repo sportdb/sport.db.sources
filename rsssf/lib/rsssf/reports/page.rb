@@ -6,18 +6,16 @@ class PageReport
 
 attr_reader :title
 
-def initialize( stats, opts )
+def initialize( stats, title: 'Your Title Here'  )
   @stats = stats
-  @opts  = opts
     
-  @title = opts[:title] || 'Your Title Here' 
+  @title = title
 end
+
 
 def save( path )
   ### save report as README.md in repo
-  File.open( path, 'w' ) do |f|
-    f.write build_summary
-  end
+  write_text( path, build_summary )
 end
 
 def build_summary
@@ -32,18 +30,22 @@ def build_summary
 
 football.db RSSSF Archive Data Summary for #{title}
 
-_Last Update: #{Time.now}_
-
 EOS
+
+## no longer add last update
+##  _Last Update: #{Time.now}_
+
 
   txt = ''
   txt << header
 
-  txt << "| Season | File   | Authors  | Last Updated | Lines (Chars) | Sections |\n"
-  txt << "| :----- | :----- | :------- | :----------- | ------------: | :------- |\n"
+  txt << "| File   | Authors  | Last Updated | Lines (Chars) | Sections |\n"
+  txt << "| :----- | :------- | :----------- | ------------: | :------- |\n"
+
+## note - removed season (no longer tracked here)
 
   stats.each do |stat|
-    txt << "| #{stat.season} "
+    ## txt << "| #{stat.season} "
     txt << "| [#{stat.basename}.txt](#{stat.basename}.txt) "
     txt << "| #{stat.authors} "
     txt << "| #{stat.last_updated} "
@@ -59,5 +61,3 @@ end  # method build_summary
 end  ## class PageReport
 end  ## module Rsssf
 
-## add (shortcut) alias
-RsssfPageReport = Rsssf::PageReport

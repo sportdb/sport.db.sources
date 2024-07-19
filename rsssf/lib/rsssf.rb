@@ -11,6 +11,12 @@ require 'cocos'
 ## require 'fetcher'        ## used for Fetcher::Worker.new.fetch etc.
 
 
+#######
+##   add RsssfParser too
+require 'rsssf/parser'    ## from rsssf-parser gem
+
+
+
 
 ## our own code
 require_relative 'rsssf/version'    # note: let version always go first
@@ -42,7 +48,8 @@ RsssfSchedule       = Rsssf::Schedule
 RsssfRepo           = Rsssf::Repo
 RsssfScheduleConfig = Rsssf::ScheduleConfig
 RsssfScheduleStat   = Rsssf::ScheduleStat
-
+RsssfScheduleReport = Rsssf::ScheduleReport
+RsssfPageReport     = Rsssf::PageReport
 
 
 

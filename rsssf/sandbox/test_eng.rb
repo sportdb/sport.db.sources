@@ -3,6 +3,11 @@
 #   $ ruby sandbox/test_eng.rb
 
 
+
+$LOAD_PATH.unshift( '../../sport.db/parser/lib' )
+$LOAD_PATH.unshift( '../../sport.db/parser-rsssf/lib' )
+
+
 $LOAD_PATH.unshift( './lib' )
 require 'rsssf'
 
@@ -18,11 +23,7 @@ path = '/sports/rsssf/england'
 repo = RsssfRepo.new( path, title: 'England (and Wales)' )
 # repo.fetch_pages   # stop: '2012/13'
 
-
-
-__END__
-
-
+   
 repo.make_pages_summary
 
 
@@ -44,8 +45,7 @@ repo.each_page do |season, page|
 end
 
 
-__END__
-
+repo.make_schedules_summary
 
 
 puts "bye"

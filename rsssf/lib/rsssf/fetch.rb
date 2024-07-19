@@ -75,10 +75,20 @@ def convert( html, url: )
   html = html.gsub( "&Eacute;", 'É' )
   html = html.gsub( "&oslash;", 'ø' )
   
+
+  ##############
   ## check for more entities
-  html = html.gsub( /&[^;]+;/) do |match|
-    puts "*** WARN - found unencoded html entity #{match}"
-    match   ## pass through as is (1:1)
+  ##   limit &---; to length 10 - why? why not?
+  html = html.gsub( /&[^; ]{1,10};/) do |match|
+
+    match =   if match == '&#307;'   ## use like Van D&#307;k  -> Van Dijk
+                'ij'
+              else
+                puts "*** WARN - found unencoded html entity #{match}"
+                match   ## pass through as is (1:1)
+              end
+
+    match   
   end
   ## todo/fix: add more entities
 
