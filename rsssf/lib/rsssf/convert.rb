@@ -35,7 +35,7 @@ class PageConverter
     html = html.gsub( "&slig;", "ß" )    ## support typo in entity (&szlig;)
     html = html.gsub( "&aaacute;", "á" )  ## typo for &aacute; 
    
-    
+
     html = html.gsub( "&Eacute;", 'É' )
     html = html.gsub( "&oslash;", 'ø' )
     html = html.gsub( "&atilde;", 'ã' )
@@ -150,7 +150,10 @@ class PageConverter
   
     html = html.gsub( '´', "'" )
 
-    
+    html = html.gsub( '’', "'" )
+    html = html.gsub( '“', '"' )
+    html = html.gsub( '”', '"' )
+
   
     txt   = html_to_txt( html )
   
