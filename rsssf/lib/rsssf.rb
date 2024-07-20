@@ -22,11 +22,10 @@ require 'rsssf/parser'    ## from rsssf-parser gem
 require_relative 'rsssf/version'    # note: let version always go first
 
 require_relative 'rsssf/utils'      # include Utils - goes first
-require_relative 'rsssf/html2txt'   # include Filters - goes first
 
 require_relative 'rsssf/download'
 
-require_relative 'rsssf/fetch'
+require_relative 'rsssf/convert'
 require_relative 'rsssf/page'
 require_relative 'rsssf/schedule'
 require_relative 'rsssf/patch'
@@ -41,18 +40,18 @@ require_relative 'rsssf/repo'
 
 #############
 ## add (shortcut) alias(es)
-RsssfPageStat       = Rsssf::PageStat
 RsssfPage           = Rsssf::Page
-RsssfPageFetcher    = Rsssf::PageFetcher
-RsssfFilters        = Rsssf::Filters
-RsssfSchedule       = Rsssf::Schedule
-
-RsssfRepo           = Rsssf::Repo
-RsssfScheduleConfig = Rsssf::ScheduleConfig
-RsssfScheduleStat   = Rsssf::ScheduleStat
-RsssfScheduleReport = Rsssf::ScheduleReport
+RsssfPageConverter  = Rsssf::PageConverter
+RsssfPageStat       = Rsssf::PageStat
 RsssfPageReport     = Rsssf::PageReport
 
+RsssfSchedule       = Rsssf::Schedule
+RsssfScheduleStat   = Rsssf::ScheduleStat
+RsssfScheduleReport = Rsssf::ScheduleReport
+
+RsssfRepo           = Rsssf::Repo
+RsssfUtils          = Rsssf::Utils
+RsssfPatcher        = Rsssf::Patcher
 
 
 

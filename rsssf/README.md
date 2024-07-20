@@ -45,15 +45,41 @@ Coritiba        2-1 Atlético/MG
 
 ## Usage
 
-### Working with Pages
 
-To fetch pages from the world wide web use:
+### Download (and Cache ) Pages
+
+To download (and cache) pages from the world wide web use:
 
 ``` ruby
-page = RsssfPage.from_url( 'http://www.rsssf.com/tablese/eng2015.html')
+Rsssf.download_page( 'https://rsssf.org/tablese/eng2024.html',
+                      encoding: 'Windows-1252' )
+
+Rsssf.download_page( 'https://rsssf.org/tablesb/braz2024.html',
+                      encoding: 'Windows-1252' )
 ```
 
-Note: The `RsssfPageFetcher` will convert the rsssf archive page
+Note:  Most pages on rsssf.org use the Windows-1252 (character) encoding.
+To "auto-magically" convert to unicode (utf-8) 
+add the encoding option (default is `UTF-8`). 
+
+Or as a convenience shortcut download (pre-configured table) pages by country code (e.g `eng` - England, `es` - Spain (España), `de` - Germany (Deutschland), `br` - Brazil (Brasil) etc.)
+and season (e.g. `2023/24` or `2024` etc.)
+
+``` ruby
+Rsssf.download_table( 'eng', season: '2023/24' )
+
+Rsssf.download_table( 'br', season: '2024' )
+```
+
+
+Note: The rsssf machinery uses a built-in web cache.  All downloads get "auto-magically" cached (in `./cache/rsssf.org`).
+
+
+
+### Working with Pages
+
+
+Note: The `RsssfPage` machinery will convert the rsssf archive page
 from hypertext (HTML) to plain text e.g.
 
 ```
@@ -120,7 +146,7 @@ Step 2: Fetch all archive pages
 Use:
 
 ``` ruby
-repo = RsssfRepo.new( './eng-england', title: 'England (and Wales)' )
+repo = RsssfRepo.new( './england', title: 'England (and Wales)' )
 repo.fetch_pages
 ```
 

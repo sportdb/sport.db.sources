@@ -4,19 +4,28 @@ module Rsssf
 
 class PageReport
 
+
+def self.build( files, title:  )   
+  stats = []
+  files.each do |file|
+    page = Page.read_txt( file )
+    stats << page.build_stat
+  end
+
+  new( stats, title: title )
+end
+
+
 attr_reader :title
 
-def initialize( stats, title: 'Your Title Here'  )
+def initialize( stats, title: )
   @stats = stats
-    
   @title = title
 end
 
+### save report as README.md in repo
+def save( path ) write_text( path, build_summary ); end
 
-def save( path )
-  ### save report as README.md in repo
-  write_text( path, build_summary )
-end
 
 def build_summary
 
@@ -45,8 +54,11 @@ EOS
 ## note - removed season (no longer tracked here)
 
   stats.each do |stat|
-    ## txt << "| #{stat.season} "
-    txt << "| [#{stat.basename}.txt](#{stat.basename}.txt) "
+    ## get basename from source url
+    url_path  = URI.parse( stat.source ).path
+    basename  = File.basename( url_path, File.extname( url_path ) )  ## e.g. duit92.txt or duit92.html => duit92
+  
+    txt << "| [#{basename}.txt](#{basename}.txt) "
     txt << "| #{stat.authors} "
     txt << "| #{stat.last_updated} "
     txt << "| #{stat.line_count} (#{stat.char_count}) "

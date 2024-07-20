@@ -69,6 +69,3 @@ end
 end  # module Utils
 end  # module Rsssf
 
-## add (shortcut) alias
-RsssfUtils = Rsssf::Utils
-

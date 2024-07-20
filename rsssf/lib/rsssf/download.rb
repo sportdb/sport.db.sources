@@ -13,11 +13,11 @@ module Rsssf
     ## map country codes to table pages
     ##   add options about (char) encoding ??? - why? why not?
   TABLE = {
-    'br'  => ['tablesb/braz{end_year}',  { encoding: 'Windows-1252' } ],
     'eng' => ['tablese/eng{end_year}',   { encoding: 'Windows-1252' } ],
     'es'  => ['tabless/span{end_year}',  { encoding: 'Windows-1252' } ],
-    'at'  => ['tableso/oost{end_year}', { encoding: 'Windows-1252' }  ],
     'de'  => ['tablesd/duit{end_year}', { encoding: 'Windows-1252' } ],
+    'at'  => ['tableso/oost{end_year}', { encoding: 'Windows-1252' }  ],
+    'br'  => ['tablesb/braz{end_year}',  { encoding: 'Windows-1252' } ],
   }
 
 

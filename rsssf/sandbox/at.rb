@@ -1,6 +1,6 @@
 ############
 #  to run use:
-#   $ ruby sandbox/test_br.rb
+#   $ ruby sandbox/at.rb
 
 $LOAD_PATH.unshift( '../../sport.db/parser/lib' )
 $LOAD_PATH.unshift( '../../sport.db/parser-rsssf/lib' )
@@ -16,8 +16,8 @@ Webcache.root = '/sports/cache'   ## use "global" (shared) cache
 
 
 
-## path = './tmp2/austria'
-path = '/sports/rsssf/austria' 
+path = './tmp2/austria'
+## path = '/sports/rsssf/austria' 
 
 
 repo = RsssfRepo.new( path, title: 'Austria (Österreich)' )

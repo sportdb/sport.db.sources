@@ -1,6 +1,72 @@
 
 module Rsssf
-module Filters
+class PageConverter
+ 
+    ## convenience helper
+     def self.convert( html, url: )
+           @@converter ||= new   ## use a "shared" built-in converter
+           @@converter.convert( html, url: url )
+     end
+    
+  ##
+  ##  add anchor: options or such 
+  ##    lets you toggle adding anchors (§premier etc.) - why? why not?  
+  
+  def convert( html, url: )
+    ### todo/fix: first check if html is all ascii-7bit e.g.
+    ## includes only chars from 64 to 127!!!
+  
+    ## normalize newlines
+    ##   remove \r (form feed) used by Windows; just use \n (new line)
+    html = html.gsub( "\r", '' )
+  
+    ## check for html entities
+    html = html.gsub( "&auml;", 'ä' )
+    html = html.gsub( "&ouml;", 'ö' )
+    html = html.gsub( "&uuml;", 'ü' )
+    html = html.gsub( "&Auml;", 'Ä' )
+    html = html.gsub( "&Ouml;", 'Ö' )
+    html = html.gsub( "&Uuml;", 'Ü' )
+    html = html.gsub( "&szlig;", 'ß' )
+  
+    ## typos / autofix - keep - why? why not?
+    html = html.gsub( "&oulm;", 'ö' )    ## support typo in entity (&ouml;)
+    html = html.gsub( "&uml;",  'ü' )    ## support typo in entity (&uuml;) - why? why not?
+    html = html.gsub( "&slig;", "ß" )    ## support typo in entity (&szlig;)
+    
+   
+    html = html.gsub( "&Eacute;", 'É' )
+    html = html.gsub( "&oslash;", 'ø' )
+    
+    ##############
+    ## check for more entities
+    ##   limit &---; to length 10 - why? why not?
+    html = html.gsub( /&[^; ]{1,10};/) do |match|
+  
+      match =   if match == '&#307;'   ## use like Van D&#307;k  -> Van Dijk
+                  'ij'
+                else
+                  puts "*** WARN - found unencoded html entity #{match}"
+                  match   ## pass through as is (1:1)
+                end
+  
+      match   
+    end
+    ## todo/fix: add more entities
+  
+  
+    txt   = html_to_txt( html )
+  
+    header = <<EOS
+  <!--
+     source: #{url}
+    -->
+  
+EOS
+  
+    header+txt  ## return txt w/ header
+  end  ## method convert
+  
 
   ## todo/fix - use generic heading regex for all h2/h3/h4 etc.
   ##  exclude h1 - why? why not?
@@ -87,8 +153,12 @@ module Filters
   #        Statistics Foundation</A> 
   #  <A href="http://www.rsssfbrasil.com">RSSSF 
   #    Brazil</A> 
+  #
+  #  and Daniel Dalence (<A
+  #   href="mailto:danielballack@terra.com.br">danielballack@terra.com.br</A>)
 
-  A_HREF_RE = %r{<A [ ]+ HREF [ ]* = 
+
+  A_HREF_RE = %r{<A \s+ HREF [ ]* = 
                     (?<href>[^>]+?)
                   >
                     (?<title>.+?)
@@ -104,15 +174,25 @@ def replace_a_href( html )
     m = Regexp.last_match
     href  = m[:href].gsub( /["']/, '' ).strip   ## remove ("" or '')
     title = m[:title].strip   ## note: "save" caputure first; gets replaced by gsub (next regex call)
-    puts " replace anchor (a) href >#{href}, >#{title}<"
 
-    ## convert href to xref
-    xref = if href.start_with?('#')    ## in-page ref
-             ", see §#{href[1..-1]}"
-           elsif href.start_with?( /https?:/ )            ## external page ref
-             ## skip - keep empty - why? why not? (or add url domain?)
-             ''
-           else
+
+    ## e.g.
+    ##  ‹Larsen23@gmx.de, see page mailto:Larsen23@gmx.de›
+    ##  ‹danielballack@terra.com.br, see page mailto:danielballack@terra.com.br›
+    ##  ‹zja70@aol.com, see page mailto:zja70@aol.com›)
+    if href.start_with?( 'mailto:')
+      puts " blank mailto  -  anchor (a) href >#{href}, >#{title}<"
+      '‹mailto›'   ## delete/remove email
+    else
+      puts " replace anchor (a) href >#{href}, >#{title}<"
+
+      ## convert href to xref
+      xref = if href.start_with?('#')    ## in-page ref
+              ", see §#{href[1..-1]}"
+             elsif href.start_with?( /https?:/ )            ## external page ref
+               ## skip - keep empty - why? why not? (or add url domain?)
+               ''
+             else
                ## hack - check for some custom excludes  
                if title.start_with?( 'Rec.Sport.Soccer' )
                     ## skip - keep empty
@@ -121,9 +201,10 @@ def replace_a_href( html )
                  ## strip (ending)  .htm|html
                  ", see page #{href.sub( /\.html?$/,'')}"
                end
-           end
+             end
 
-    "‹#{squish(title)}#{xref}›"
+      "‹#{squish(title)}#{xref}›"
+    end
   end
 end
 
@@ -193,7 +274,6 @@ def html_to_txt( html )
 
 
 
-
   ## replace paragrah (p)
   html = html.gsub( /\s*<P>\s*/im ) do |match|    ## note: include (swallow) "extra" newline
     match = match.gsub( "\n", '$$' )  ## make newlines visible for debugging
@@ -237,10 +317,23 @@ def html_to_txt( html )
 =end
 
 
+
+  ### remove emails etc.
+
+  ### remove converted ("blineded") mailto anchors
+  ##  note   usually inside () e.g.
+  ##    (‹mailto›) 
+  ##   plus slurp up all leading whitespace (incl. newline) - why? why not?
+  html = html.gsub( /\s*
+                      \(‹mailto›\)
+                     /xm, '' )
+  
+
+
   ## cleanup whitespaces
   ##   todo/fix:  convert newline in space first
   ##                and than collapse spaces etc.!!!
-  txt = ''
+  txt = String.new
   html.each_line do |line|
      line = line.gsub( "\t", '  ' ) # replace all tabs w/ two spaces for nwo
      line = line.rstrip             # remove trailing whitespace (incl. newline/formfeed)
@@ -249,41 +342,8 @@ def html_to_txt( html )
      txt << "\n"
   end
 
-  ### remove emails etc.
-  txt = sanitize( txt )
-
   txt
 end # method html_to_text
-
-
-
-def sanitize( txt )
-  ### remove emails for (spam/privacy) protection
-  ## e.g. (selamm@example.es)
-  ##      (buuu@mscs.dal.ca)
-  ##      (kaxx@rsssf.com)
-  ##      (Manu_Maya@yakoo.co)
-
-  ##   note add support for optional ‹› enclosure (used by html2txt converted a href :mailto links)
-  ##   e.g. (‹selamm@example.es›)
-
-  email_pattern = "\\(‹?[a-z][a-z0-9_]+@[a-z]+(\\.[a-z]+)+›?\\)"   ## note: just a string; needs to escape \\ twice!!!
-
-  ## check for "free-standing e.g. on its own line" emails only for now
-  txt = txt.gsub( /\n#{email_pattern}\n/i ) do |match|
-    puts "removing (free-standing) email >#{match}<"
-    "\n"   # return empty line
-  end
-
-  txt = txt.gsub( /#{email_pattern}/i ) do |match|
-    puts "remove email >#{match}<"
-    ''
-  end
-
-  txt  
-end # method sanitize
-
-end # module Filters
+end # module PageConverter
 end # module Rsssf
-
 

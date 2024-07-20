@@ -22,6 +22,3 @@ end
 end # class Patcher
 end  ## module Rsssf
 
-## add (shortcut) alias
-RsssfPatcher = Rsssf::Patcher
-

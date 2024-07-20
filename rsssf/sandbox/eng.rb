@@ -1,6 +1,6 @@
 ############
 #  to run use:
-#   $ ruby sandbox/test_eng.rb
+#   $ ruby sandbox/eng.rb
 
 
 
@@ -16,8 +16,8 @@ require 'rsssf'
 Webcache.root = '/sports/cache' 
 
 
-## path = './tmp2/england'
-path = '/sports/rsssf/england' 
+path = './tmp2/england'
+## path = '/sports/rsssf/england' 
 
 
 repo = RsssfRepo.new( path, title: 'England (and Wales)' )
@@ -26,6 +26,10 @@ seasons = Season('2010/11')..Season('2023/24')
 repo.prepare_pages( code, seasons )
     
 repo.make_pages_summary
+
+##  check for &uml; fix???
+## 2020-21/1-premierleague.txt -- parse error (INSIDE_RE) - skipping >G&< @22,25
+##       in line >[Bernardo Silva 79, G&uml;ndogan 90pen]<
 
 
 repo.each_page(code, seasons) do |season, page|

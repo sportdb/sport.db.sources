@@ -1,30 +1,54 @@
 
 
 module Rsssf
-     
+
+  
+ScheduleStat = Struct.new(
+    :path,     ## path to .txt file
+    :errors   ## array or nil
+)
+
+
+
 class ScheduleReport
+
+def self.build( files, title: )
+  linter = Parser::Linter.new
+
+  stats = []
+  files.each_with_index do |file,i|
+
+    puts "==> [#{i+1}/#{files.size}] reading >#{file}<..."  
+    linter.read( file, parse: true )
+    
+    stat = ScheduleStat.new
+    stat.path   = file
+    stat.errors = linter.errors
+     
+    stats << stat
+  end
+
+  new( stats, title: title )
+end
+
 
 attr_reader :title
 
-def initialize( datafiles, 
-                  title: 'Your Title Here' )
-  @datafiles = datafiles 
-    
+def initialize( stats,  title: )
+  @stats = stats 
   @title = title
 end
 
-def save( path )
-  ### save report as README.md in repo
-  write_text( path,  build_summary )
-end
+### save report as README.md in repo
+def save( path ) write_text( path, build_summary ); end
 
 
 def build_summary
   ## sort start 1) by season (latest first) than 
   ##            2) by name (e.g. 1-bundesliga, cup, etc.)
-  datafiles = @datafiles.sort do |l,r|
-    v =  File.basename(File.dirname(r)) <=> File.basename(File.dirname(l))
-    v =  File.basename(l) <=> File.basename(r)    if v == 0  ## same season
+  stats = @stats.sort do |l,r|
+    v =  File.basename(File.dirname(r.path)) <=> File.basename(File.dirname(l.path))
+    v =  File.basename(l.path) <=> File.basename(r.path)    if v == 0  ## same season
     v
   end
 
@@ -54,7 +78,6 @@ EOS
 =end
 
 
-  linter = Parser::Linter.new
   errors = []
 
 
@@ -65,29 +88,28 @@ EOS
   txt << "| :----- | :---------- | -----: |\n"
 
   
-  datafiles.each_with_index do |path,i|
-      puts "==> [#{i+1}/#{datafiles.size}] reading >#{path}<..."
-      linter.read( path, parse: true )
-
+  stats.each_with_index do |stat,i|
+ 
+      path = stat.path
       season_dir = File.basename(File.dirname( path ))
       filename   = File.basename( path ) ## incl. extension !!
 
       txt << "| #{season_dir} "
       txt << "| [#{filename}](#{season_dir}/#{filename}) "
     
-      txt <<   if linter.errors?
-                 "|  **!! #{linter.errors.size}**  "
+      txt <<   if stat.errors.size > 0
+                 "|  **!! #{stat.errors.size}**  "
                else
                  "|  OK  "
                end
       txt << "|\n"
   
-      errors += linter.errors  if linter.errors? 
+      errors += stat.errors  if stat.errors.size > 0 
   end
 
    if errors.size > 0
      txt << "\n\n"
-     txt << "#{errors.size} errors in #{datafiles.size} datafile(s)\n\n"
+     txt << "#{errors.size} errors in #{stats.size} datafile(s)\n\n"
 
      txt << "```\n"
      errors.each do |path, msg, line|
