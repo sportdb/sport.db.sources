@@ -1,37 +1,28 @@
 ############
 #  to run use:
-#   $ ruby sandbox/test_es.rb
-
-$LOAD_PATH.unshift( '../../sport.db/parser/lib' )
-$LOAD_PATH.unshift( '../../sport.db/parser-rsssf/lib' )
+#   $ ruby sandbox/es.rb
 
 
-$LOAD_PATH.unshift( './lib' )
-require 'rsssf'
-
-
-## Webcache.root = './cache' 
-
-Webcache.root = '/sports/cache'   ## use "global" (shared) cache
+require_relative 'helper'
 
 
 
-## path = './tmp2/espana'
-path = '/sports/rsssf/espana' 
-
-
-repo = RsssfRepo.new( path, title: 'España (Spain)' )
+path = './tmp2/espana'
+## path = '/sports/rsssf/espana' 
 
 code    = 'es'
 seasons = Season('2010/11')..Season('2023/24')
+title   = 'España (Spain)'  
+
+
+repo = RsssfRepo.new( path, title: title )
+
 repo.prepare_pages( code, seasons )
 
 repo.make_pages_summary
 
-
+seasons = Season('2010/11')..Season('2015/16')
 repo.each_page( code, seasons ) do |season,page|
-  next if season > Season('2015/16')
-
   puts "==> #{season}..."
 
   sched = page.find_schedule( header: 'Primera División' )

@@ -2,36 +2,26 @@
 #  to run use:
 #   $ ruby sandbox/at.rb
 
-$LOAD_PATH.unshift( '../../sport.db/parser/lib' )
-$LOAD_PATH.unshift( '../../sport.db/parser-rsssf/lib' )
 
-
-$LOAD_PATH.unshift( './lib' )
-require 'rsssf'
-
-
-## Webcache.root = './cache' 
-
-Webcache.root = '/sports/cache'   ## use "global" (shared) cache
+require_relative 'helper'
 
 
 
 path = './tmp2/austria'
 ## path = '/sports/rsssf/austria' 
 
-
-repo = RsssfRepo.new( path, title: 'Austria (Österreich)' )
-
 code    = 'at'
-seasons = Season('2010/11')..Season('2023/24')
+seasons = Season('1974/75')..Season('2023/24')   ## start 1974/75 
+title   = 'Austria (Österreich)'
+
+
+repo = RsssfRepo.new( path, title: title )
 repo.prepare_pages( code, seasons )
 
 repo.make_pages_summary
 
-
+seasons = Season('2010/11')..Season('2015/16')
 repo.each_page( code, seasons ) do |season,page|
-  next if season > Season('2015/16')
-
   puts "==> #{season}..."
 
   sched = page.find_schedule( header: 'Bundesliga' )

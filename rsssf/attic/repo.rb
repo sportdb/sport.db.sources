@@ -1,56 +1,5 @@
 
-## used by Repo#make_schedules
-ScheduleConfig = Struct.new(
-  :name,
-  :opts_for_year,  ## hash or proc ->(year){ Hash[...] }
-  :dir_for_year,  ## proc ->(year){ 'path_here'}     ## rename to path_for_year - why, why not??
-  :includes        ## array of years to include e.g. [2011,2012] etc.
-)
 
-
-ScheduleStat = Struct.new(
-  :path,          ## e.g. 2012-13 or archive/1980s/1984-85
-  :filename,      ## e.g. 1-bundesliga.txt   -- note: w/o path
-  :year,          ## e.g. 2013      -- note: numeric (integer)
-  :season,        ## e.g. 2012-13   -- note: is a string
-  :rounds         ## e.g. 36   -- note: numeric (integer)
-)
-
-
-
-def make_schedules_summary_v0( stats )   ## note: requires stats to be passed in for now
-    report = ScheduleReport.new( stats, @opts )   ## pass in title etc.
-    report.save( "#{@repo_path}/README.md" )
-end  # method make_schedules_summary
-  
-
-
-
-def each_page_v0( &blk )  ## use each table or such - why? why not?
-  cfg = YAML.load_file( "#{@repo_path}/tables/config.yml") 
-  pp cfg
-
-  cfg.each do |key,line|
-
-    ## e.g.       tablesb/braz2013.html  --  Windows-1252
-    ##        or  tablesb/braz2014.html  !! Windows-1252
-    values = line.split( /--|!!/ ).map { |value| value.strip }
-    path = values[0]
-
-    ## note: assumes extension is .html
-    #    e.g. tablesd/duit2011.html => duit2011
-    basename = File.basename( path, '.html' )
-
-    path = "#{@repo_path}/tables/#{basename}.txt"
-
-     ## convert key to season
-     season = Season( key )
-
-     page = Page.from_file( path )
-
-     blk.call( season, page )
-  end 
-end
 
 
 def fetch_pages( start: nil, stop: nil )
@@ -95,6 +44,24 @@ def fetch_pages( start: nil, stop: nil )
   end # each year
 end # method fetch_pages
 
+
+
+## used by Repo#make_schedules
+ScheduleConfig = Struct.new(
+  :name,
+  :opts_for_year,  ## hash or proc ->(year){ Hash[...] }
+  :dir_for_year,  ## proc ->(year){ 'path_here'}     ## rename to path_for_year - why, why not??
+  :includes        ## array of years to include e.g. [2011,2012] etc.
+)
+
+
+ScheduleStat = Struct.new(
+  :path,          ## e.g. 2012-13 or archive/1980s/1984-85
+  :filename,      ## e.g. 1-bundesliga.txt   -- note: w/o path
+  :year,          ## e.g. 2013      -- note: numeric (integer)
+  :season,        ## e.g. 2012-13   -- note: is a string
+  :rounds         ## e.g. 36   -- note: numeric (integer)
+)
 
 
 def make_schedules( cfg )

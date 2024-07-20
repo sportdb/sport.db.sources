@@ -13,11 +13,20 @@ module Rsssf
     ## map country codes to table pages
     ##   add options about (char) encoding ??? - why? why not?
   TABLE = {
-    'eng' => ['tablese/eng{end_year}',   { encoding: 'Windows-1252' } ],
-    'es'  => ['tabless/span{end_year}',  { encoding: 'Windows-1252' } ],
-    'de'  => ['tablesd/duit{end_year}', { encoding: 'Windows-1252' } ],
-    'at'  => ['tableso/oost{end_year}', { encoding: 'Windows-1252' }  ],
-    'br'  => ['tablesb/braz{end_year}',  { encoding: 'Windows-1252' } ],
+    'eng' => ['tablese/eng{year}',   { encoding: 'Windows-1252' } ],
+    'es'  => ['tabless/span{year}',  { encoding: 'Windows-1252' } ],
+    'de'  => ['tablesd/duit{year}', { encoding: 'Windows-1252' } ],
+    'at'  => ['tableso/oost{year}', { encoding: 'Windows-1252' }  ],
+    'br'  => [
+              ->(season) {
+                  ## note: special slug/case for year/season 2000
+                  ##  see rsssf.org/tablesb/brazchamp.html
+                 if season == Season('2000') 
+                   'tablesb/braz-joao{year}'  ## use braz-joao00 - why? why not?
+                 else
+                   'tablesb/braz{year}'
+                 end
+              },  { encoding: 'Windows-1252' } ],
   }
 
 
@@ -30,12 +39,16 @@ module Rsssf
   end
 
   def self.table_url_and_encoding( code, season: )
+     season = Season( season )
+
      table = TABLE[ code.downcase ]
      tmpl     = table[0]
+     tmpl     = tmpl.call( season )  if tmpl.is_a?(Proc)  ## check for proc
+   
      opts     = table[1] || {}
      encoding = opts[:encoding]  || 'UTF-8'
 
-     season = Season( season )
+
      slug =  if season.end_year < 2010   ## cut off all digits (only keep last two)s
                  ##  convert end_year to string with leading zero
                  '%02d' % (season.end_year % 100)  ## e.g. 00 / 01 / 99 / 98 / 11 / etc.
@@ -43,7 +56,7 @@ module Rsssf
                 '%4d' % season.end_year
               end
 
-     tmpl = tmpl.sub( '{end_year}', slug )
+     tmpl = tmpl.sub( '{year}', slug )
      url = "#{BASE_URL}/#{tmpl}.html"
 
      [url, encoding]

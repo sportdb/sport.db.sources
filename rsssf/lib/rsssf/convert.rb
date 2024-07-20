@@ -33,11 +33,97 @@ class PageConverter
     html = html.gsub( "&oulm;", 'ö' )    ## support typo in entity (&ouml;)
     html = html.gsub( "&uml;",  'ü' )    ## support typo in entity (&uuml;) - why? why not?
     html = html.gsub( "&slig;", "ß" )    ## support typo in entity (&szlig;)
-    
+    html = html.gsub( "&aaacute;", "á" )  ## typo for &aacute; 
    
+    
     html = html.gsub( "&Eacute;", 'É' )
     html = html.gsub( "&oslash;", 'ø' )
-    
+    html = html.gsub( "&atilde;", 'ã' )
+    html = html.gsub( "&otilde;", 'õ' )
+    html = html.gsub( "&ocirc;", 'ô' )
+
+    entities = %w[
+À   &Agrave;
+Á   &Aacute;
+Â   &Acirc;
+Ã   &Atilde;
+Ä   &Auml;
+Å   &Aring;
+à   &agrave;
+á   &aacute;
+â   &acirc;
+ã   &atilde;
+ä   &auml;
+å   &aring;
+Æ   &AElig;
+æ   &aelig;
+ß   &szlig;
+Ç   &Ccedil;
+ç   &ccedil;
+È   &Egrave;
+É   &Eacute;
+Ê   &Ecirc;
+Ë   &Euml;
+è   &egrave;
+é   &eacute;
+ê   &ecirc;
+ë   &euml;
+Ì   &Igrave;
+Í   &Iacute;
+Î   &Icirc;
+Ï   &Iuml;
+ì   &igrave;
+í   &iacute;
+î   &icirc;
+ï   &iuml;
+Ñ   &Ntilde;
+ñ   &ntilde;
+Ò   &Ograve;
+Ó   &Oacute;
+Ô   &Ocirc;
+Õ   &Otilde;
+Ö   &Ouml;
+ò   &ograve;
+ó   &oacute;
+ô   &ocirc;
+õ   &otilde;
+ö   &ouml;
+Ø   &Oslash;
+ø   &oslash;
+Ù   &Ugrave;
+Ú   &Uacute;
+Û   &Ucirc;
+Ü   &Uuml;
+ù   &ugrave;
+ú   &uacute;
+û   &ucirc;
+ü   &uuml;
+Ý   &Yacute;
+ý   &yacute;
+ÿ   &yuml;
+
+<    &lt;
+>    &gt;
+&    &amp;
+©    &copy;
+®    &reg;
+
+Š    &#352; 
+š    &#353; 
+č    &#269; 
+ć    &#263; 
+Ž    &#381;
+’    &#8217;
+  ]
+
+
+
+    entities.each_slice(2) do |str, entity|
+       html = html.gsub( entity, str )
+    end
+
+
+
     ##############
     ## check for more entities
     ##   limit &---; to length 10 - why? why not?
@@ -46,7 +132,10 @@ class PageConverter
       match =   if match == '&#307;'   ## use like Van D&#307;k  -> Van Dijk
                   'ij'
                 else
-                  puts "*** WARN - found unencoded html entity #{match}"
+                  msg = "found unencoded html entity #{match}"
+                  puts "*** WARN - #{msg}"
+                  log( msg )  ## log too (see log.txt)
+
                   match   ## pass through as is (1:1)
                 end
   
@@ -54,6 +143,14 @@ class PageConverter
     end
     ## todo/fix: add more entities
   
+###################################
+ ### smart quotes quick fixes   
+### convert all "smart" quote to (standard) single quotes
+##  D´Alessandro   =>  D'Alessandro 
+  
+    html = html.gsub( '´', "'" )
+
+    
   
     txt   = html_to_txt( html )
   
@@ -230,6 +327,41 @@ def replace_a_name( html )
 end
 
 
+EMAIL_RE = %r{ \s*
+\(
+ [a-z][a-z0-9_]+
+   @[a-z]+(\.[a-z]+)+
+ \)
+}imx   
+
+
+def remove_emails( html )
+  ### remove converted ("blineded") mailto anchors
+  ##  note   usually inside () e.g.
+  ##    (‹mailto›) 
+  ##   plus slurp up all leading whitespace (incl. newline) - why? why not?
+  html = html.gsub( /\s*
+                      \(‹mailto›\)
+                     /xm, '' )
+  
+   ###
+   ##  remove "regular emails too e.g.
+   ##
+   ## Thanks to Marcelo Leme de Arruda (___@___.__.br),
+   ##  Ricardo FF Pontes (___@____.com), 
+   ## Santiago Reis (____@____.com.br),
+   ## Marcos Lacerda Queiroz (___@____.com.br)
+   ##  etc.
+
+  ## check for "free-standing e.g. on its own line" emails only for now
+   html = html.gsub( EMAIL_RE ) do |match|
+    puts "removing  email >#{match}<"
+    ''   
+   end
+   html
+end
+
+
 
 def html_to_txt( html )
 
@@ -317,17 +449,7 @@ def html_to_txt( html )
 =end
 
 
-
-  ### remove emails etc.
-
-  ### remove converted ("blineded") mailto anchors
-  ##  note   usually inside () e.g.
-  ##    (‹mailto›) 
-  ##   plus slurp up all leading whitespace (incl. newline) - why? why not?
-  html = html.gsub( /\s*
-                      \(‹mailto›\)
-                     /xm, '' )
-  
+  html = remove_emails( html )
 
 
   ## cleanup whitespaces
@@ -344,6 +466,22 @@ def html_to_txt( html )
 
   txt
 end # method html_to_text
+
+
+
+###
+# more helpers
+def log( msg )
+  ## append msg to ./logs.txt  
+  ##     use ./errors.txt - why? why not?
+  File.open( './logs.txt', 'a:utf-8' ) do |f|
+    f.write( msg )
+    f.write( "\n" ) 
+  end
+end
+
+
+
 end # module PageConverter
 end # module Rsssf
 

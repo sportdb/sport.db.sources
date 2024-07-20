@@ -3,35 +3,24 @@
 #   $ ruby sandbox/eng.rb
 
 
-
-$LOAD_PATH.unshift( '../../sport.db/parser/lib' )
-$LOAD_PATH.unshift( '../../sport.db/parser-rsssf/lib' )
-
-
-$LOAD_PATH.unshift( './lib' )
-require 'rsssf'
-
-
-
-Webcache.root = '/sports/cache' 
+require_relative 'helper'
 
 
 path = './tmp2/england'
 ## path = '/sports/rsssf/england' 
 
 
-repo = RsssfRepo.new( path, title: 'England (and Wales)' )
 code    = 'eng'
-seasons = Season('2010/11')..Season('2023/24')
+seasons = Season('1992/93')..Season('2023/24')
+title   = 'England (and Wales)'
+
+repo = RsssfRepo.new( path, title:  )
 repo.prepare_pages( code, seasons )
     
 repo.make_pages_summary
 
-##  check for &uml; fix???
-## 2020-21/1-premierleague.txt -- parse error (INSIDE_RE) - skipping >G&< @22,25
-##       in line >[Bernardo Silva 79, G&uml;ndogan 90pen]<
 
-
+seasons = Season('2010/11')..Season('2023/24')
 repo.each_page(code, seasons) do |season, page|
   puts "==> #{season}..."
 

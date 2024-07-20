@@ -2,18 +2,9 @@
 #  to run use:
 #   $ ruby sandbox/download.rb
 
+require_relative 'helper'
 
 
-$LOAD_PATH.unshift( '../../sport.db/parser/lib' )
-$LOAD_PATH.unshift( '../../sport.db/parser-rsssf/lib' )
-
-
-$LOAD_PATH.unshift( './lib' )
-require 'rsssf'
-
-
-
-Webcache.root = '/sports/cache' 
 
 
 # try germany
