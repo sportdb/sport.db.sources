@@ -28,7 +28,6 @@ require_relative 'rsssf/download'
 require_relative 'rsssf/convert'
 require_relative 'rsssf/page'
 require_relative 'rsssf/schedule'
-require_relative 'rsssf/patch'
 
 require_relative 'rsssf/reports/schedule'
 require_relative 'rsssf/reports/page'
@@ -51,7 +50,6 @@ RsssfScheduleReport = Rsssf::ScheduleReport
 
 RsssfRepo           = Rsssf::Repo
 RsssfUtils          = Rsssf::Utils
-RsssfPatcher        = Rsssf::Patcher
 
 
 
