@@ -85,6 +85,21 @@ end
       txt = patch_heading( txt, DE_CUP,         'DFB Pokal'     )
     end # year < 2010
 
+
+## quick fix
+##  remove crashing note for now
+##   in DFB Pokal 2019/20
+   if name == 'duit2020'
+  note =<<TXT
+NB: 1.FC Saarbrücken are the first club ever to reach the cup semifinals while
+    playing at the fourth league level (they were promoted to the third level
+    at the end of May following the abandonment of their regional league); they
+    host their cup matches in nearby Völklingen as the Ludwigspark stadium in
+    Saarbrücken is undergoing renovation
+TXT
+    txt = txt.sub( note, '' )
+   end
+
     txt
   end
 end

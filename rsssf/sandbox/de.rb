@@ -6,8 +6,8 @@
 require_relative 'helper'
 
 
-## path = './tmp2/deutschland'
-path = '/sports/rsssf/deutschland' 
+path = './tmp2/deutschland'
+## path = '/sports/rsssf/deutschland' 
 
 
 code    = 'de'

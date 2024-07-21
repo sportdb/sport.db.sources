@@ -154,7 +154,11 @@ class PageConverter
     html = html.gsub( '“', '"' )
     html = html.gsub( '”', '"' )
 
-  
+### convert fancy dashes/hyphens to plain dash/hyphen  
+     html = html.gsub( '–', '-' )
+ 
+
+     
     txt   = html_to_txt( html )
   
     header = <<EOS

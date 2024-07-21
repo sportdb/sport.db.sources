@@ -46,6 +46,7 @@ o/
 #########
 ### ignore logs and errors
 logs.txt
+logs.2.txt
 logs.html
 error.txt
 error.html
