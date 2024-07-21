@@ -2,6 +2,9 @@
 module Rsssf
 module Utils
 
+
+## move to Page - why? why not?
+
 def year_from_file( path )
   extname  = File.extname( path )
   basename = File.basename( path, extname )  ## e.g. duit92.txt or duit92.html => duit92
@@ -31,39 +34,21 @@ def year_from_name( name )
 end  # method year_from_name
 
 
-def year_to_season( year )
 
-  ## todo: require four digit years? why? why not??
+def archive_dir_for_season( season )
+  season = Season( season )
 
-  ## e.g. 64   => 1963-64
-  ##      2011 => 2010-11   etc.
-
-  if year <= 16  ## assume 20xx for now from 00..16
-    year += 2000
-  elsif year <= 99
-    year += 1900
-  else
-    # use as is; assume four digit year
-  end  
-
-  year_prev = year-1
-
-  "%4d-%02d" % [year_prev, year%100]   ## e.g. return 1974-75
-end
-
-
-def archive_dir_for_year( year )
-  season = year_to_season( year )
-  if year <= 2010   # e.g. season 2009-10
+  if season < Season('2010')   # e.g. season 2009-10 
     ## use archive folder (w/ 1980s etc)
     ## get decade folder
-    decade  = year-1
+    decade  = season.start_year     ## 1999/2000 2000
     decade -= decade % 10   ## turn 1987 into 1980 etc
-    "archive/#{decade}s/#{season}"
+    "archive/#{decade}s/#{season.to_path}"
   else
-    season 
+    season.to_path
   end
 end
+
 
 
 end  # module Utils

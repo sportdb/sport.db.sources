@@ -109,9 +109,12 @@ def patch_dir( root, &blk )
     year     = year_from_name( basename )
 
     new_txt = blk.call( txt, basename, year )
-    ## calculate hash to see if anything changed ?? why? why not??
 
-    write_text( file, new_txt )
+    ## calculate hash to see if anything changed ?? why? why not??
+    if txt != new_txt
+      puts "  patching #{file}, text changed"
+      write_text( file, new_txt )
+    end
   end # each file
 end  ## patch_dir
 

@@ -1,3 +1,7 @@
+###
+# to run use:
+#
+#  ruby  test/test_utils.rb
 
 
 
@@ -53,31 +57,26 @@ class TestUtils < Minitest::Test
     assert_equal 2011, year_from_file( 'de-deutschland/tables/duit2011.html' )
 
 
-    #####
-    ## year_to_season
-
-    assert_equal '1998-99', year_to_season( 1999 )
-    assert_equal '1999-00', year_to_season( 2000 )   ## todo: use 1999-2000 - why? why not??
-    assert_equal '2000-01', year_to_season( 2001 )
-    assert_equal '2014-15', year_to_season( 2015 )
-
-    assert_equal '1999-00', year_to_season( 0 )
-    assert_equal '1963-64', year_to_season( 64 )
-    assert_equal '1998-99', year_to_season( 99 )
-    assert_equal '1964-65', year_to_season( 1965 )
-    assert_equal '2010-11', year_to_season( 2011 )
-
-
     #######
     ## archive_dir_for_year
     ##  note:  year <= 2010  use season 2009-10
 
-    assert_equal 'archive/1990s/1998-99', archive_dir_for_year( 1999 )
-    assert_equal 'archive/2000s/2000-01', archive_dir_for_year( 2001 )
-    assert_equal '2014-15',               archive_dir_for_year( 2015 )
+  
+    assert_equal '2014-15',               archive_dir_for_season( '2014/15' )
+    assert_equal '2010-11',               archive_dir_for_season( '2010/11' )
+    assert_equal '2011',               archive_dir_for_season( '2011' )
+    assert_equal '2010',               archive_dir_for_season( '2010' )
 
-
-    assert true  ## everything ok if get here
+    assert_equal 'archive/2000s/2009-10', archive_dir_for_season( '2009/10' )
+    assert_equal 'archive/2000s/2000-01', archive_dir_for_season( '2000/01' )
+    assert_equal 'archive/2000s/2009', archive_dir_for_season( '2009' )
+    assert_equal 'archive/2000s/2000', archive_dir_for_season( '2000' )
+  
+    assert_equal 'archive/1990s/1999-00', archive_dir_for_season( '1999/2000' )
+    assert_equal 'archive/1990s/1999-00', archive_dir_for_season( '1999/00' )
+    assert_equal 'archive/1990s/1998-99', archive_dir_for_season( '1998/99' )
+    assert_equal 'archive/1990s/1999', archive_dir_for_season( '1999' )
+    assert_equal 'archive/1990s/1990', archive_dir_for_season( '1990' )
   end
 
 end # class TestUtils
