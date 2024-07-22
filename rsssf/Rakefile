@@ -18,9 +18,8 @@ Hoe.spec 'rsssf' do
   self.history_file = 'CHANGELOG.md'
 
   self.extra_deps = [
-    ['logutils'],
-    ['textutils'],
-    ['fetcher'],
+    ['cocos'],
+    ['season-formats'],
     ['rsssf-parser'],   ## add rsssf parser machinery & tool
   ]
 
