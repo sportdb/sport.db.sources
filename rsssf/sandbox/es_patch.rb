@@ -1,5 +1,5 @@
 class PatchEs
-  def patch( txt, name, year )
+  def on_patch( txt, name, year )
     puts "==> patch #{name} - #{year}"
 
     if name == 'span2016'
@@ -38,6 +38,7 @@ class PatchEs
                )
 
    # in Copa del Rey
+   ##   move to on_parse - why? why not?   
 note =<<TXT
   [Madrid: Iker Casillas; Alvaro Arbeloa, Sergio Ramos, Ricardo Carvalho
      (Ezequiel Garay 19), "Marcelo" Vieira da Silva, "Pepe" Kepler

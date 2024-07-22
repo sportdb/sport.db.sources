@@ -46,8 +46,20 @@ def self.read_txt( path )  ## use read_txt
 end
 
 
+
+### use text alias too (for txt) - why? why not?
+attr_accessor :txt
+
+## quick hack? used for auto-patch machinery
+attr_accessor :patch
+attr_accessor :url  ### source url
+
+
 def initialize( txt )
   @txt = txt
+
+  @patch = nil
+  @url   = nil
 end
 
 
@@ -213,6 +225,16 @@ def find_schedule( header: nil,
       end
     end
   end  # each line
+
+
+  ## quick hack? 
+  ### auto-apply patch if patch configured
+   if @patch  && @patch.respond_to?(:on_patch)
+      url_path = URI.parse( url ).path
+      basename = File.basename( url_path, File.extname( url_path ))
+      year     = year_from_name( basename )
+      new_txt = @patch.on_patch( new_txt, basename, year )
+   end
 
   schedule = Schedule.new( new_txt )
   ## schedule.rounds = round_count

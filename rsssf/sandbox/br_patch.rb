@@ -1,5 +1,5 @@
 class PatchBr
-  def patch( txt, name, year )
+  def on_patch( txt, name, year )
     puts "==> patch #{name} - #{year}"
 
     if name == 'braz2019'

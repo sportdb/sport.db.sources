@@ -149,8 +149,9 @@ class PageConverter
 ##  D´Alessandro   =>  D'Alessandro 
   
     html = html.gsub( '´', "'" )
-
+    
     html = html.gsub( '’', "'" )
+    html = html.gsub( '‘', "'" )
     html = html.gsub( '“', '"' )
     html = html.gsub( '”', '"' )
 

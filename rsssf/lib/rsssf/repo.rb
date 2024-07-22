@@ -7,9 +7,11 @@ class Repo
   include Utils       ## e.g. year_from_file, etc.
 
 
-def initialize( path, title: 'Your Title Here' )    ## pass in title etc.
+def initialize( path, title: 'Your Title Here',    
+                      patch: nil )   
   @repo_path = path
   @title     = title
+  @patch     = patch
 end
 
 
@@ -37,6 +39,14 @@ def prepare_pages( code, seasons )
 
     basename = File.basename( url_path, File.extname( url_path ))
 
+    ###
+    ## check for on_prepare (apply patches)
+    if @patch && @patch.respond_to?(:on_prepare)
+       year = year_from_name( basename )
+       page.txt = @patch.on_prepare( page.txt, basename, year )    
+    end
+
+
     path = "#{@repo_path}/tables/#{basename}.txt"
     page.save( path ) 
   end
@@ -53,6 +63,13 @@ def each_page( code, seasons, &blk )  ## use each table or such - why? why not?
 
     path = "#{@repo_path}/tables/#{basename}.txt"
      page = Page.read_txt( path )
+
+     ## add/pass along patcher if patcher
+     if @patch 
+       page.patch  = @patch
+       page.url    = url
+     end 
+
     season = Season( season )
     blk.call( season, page )
   end
@@ -73,8 +90,9 @@ def make_schedules_summary
    args = [@repo_path]
    files = SportDb::Parser::Opts.expand_args( args )
    pp files   
-   
-   report = ScheduleReport.build( files, title: @title )   ## pass in title etc.
+             
+   report = ScheduleReport.build( files, title: @title,
+                                         patch: @patch )   ## pass in title etc.
    report.save( "#{@repo_path}/README.md" )
 end  
 

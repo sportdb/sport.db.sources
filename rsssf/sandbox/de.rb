@@ -5,27 +5,29 @@
 
 require_relative 'helper'
 
+require_relative 'de_patch'
 
-path = './tmp2/deutschland'
-## path = '/sports/rsssf/deutschland' 
+
+## path = './tmp2/deutschland'
+path = '/sports/rsssf/deutschland' 
 
 
 code    = 'de'
 seasons = Season('1963/64')..Season('2023/24')
 title   = 'Germany (Deutschland)' 
+patch   =  PatchDe.new
 
-repo = RsssfRepo.new( path, title: title )
+repo = RsssfRepo.new( path, title: title, 
+                            patch: patch )
 
 repo.prepare_pages( code, seasons )
 
-require_relative 'de_patch'
-repo.patch_pages( PatchDe.new )
 
 
 repo.make_pages_summary
 
 
-seasons = Season('1963/64')..Season('2023/24')
+## seasons = Season('1963/64')..Season('2023/24')
 # seasons = Season('1999/2000')..Season('2023/24')
 ## seasons = Season('2020/21')..Season('2023/24')
 repo.each_page( code, seasons ) do |season,page|
@@ -47,6 +49,7 @@ repo.each_page( code, seasons ) do |season,page|
                 header: "= DFB Pokal #{season}\n\n" )
   end
 end 
+
 
 
 repo.make_schedules_summary

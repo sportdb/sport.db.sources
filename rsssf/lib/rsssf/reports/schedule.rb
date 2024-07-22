@@ -12,14 +12,32 @@ ScheduleStat = Struct.new(
 
 class ScheduleReport
 
-def self.build( files, title: )
+  include Utils       ## e.g. year_from_file, etc.
+
+##
+##  quick hack?  pass along (optional) patch
+
+def self.build( files, title:, 
+                       patch: nil )
   linter = Parser::Linter.new
 
   stats = []
   files.each_with_index do |file,i|
 
     puts "==> [#{i+1}/#{files.size}] reading >#{file}<..."  
-    linter.read( file, parse: true )
+
+    txt = read_text( file )
+
+    if patch && patch.respond_to?(:on_parse)
+      season_dir = File.basename(File.dirname(file)) 
+      season     = Season( season_dir )
+      basename   = File.basename(file, File.extname(file)) 
+      puts "  [debug] before  patch.on_parse #{basename}, #{season}"
+      txt = patch.on_parse( txt, basename, season )
+    end
+  
+    linter.parse( txt, parse: true,
+                       path:  file  )   ## todo/fix - change path to file/filename - why? why not?
     
     stat = ScheduleStat.new
     stat.path   = file
@@ -94,8 +112,12 @@ EOS
       season_dir = File.basename(File.dirname( path ))
       filename   = File.basename( path ) ## incl. extension !!
 
+      season = Season( season_dir )
+      ## note - use archive_dir_for_season for archive path
+      
+
       txt << "| #{season_dir} "
-      txt << "| [#{filename}](#{season_dir}/#{filename}) "
+      txt << "| [#{filename}](#{archive_dir_for_season(season)}/#{filename}) "
     
       txt <<   if stat.errors.size > 0
                  "|  **!! #{stat.errors.size}**  "

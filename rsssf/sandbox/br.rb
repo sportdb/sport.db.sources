@@ -4,6 +4,8 @@
 
 require_relative  'helper' 
 
+require_relative 'br_patch'
+
 
 path = './tmp2/brazil'
 ## path = '/sports/rsssf/brazil' 
@@ -12,14 +14,12 @@ code    = 'br'
 ## start
 seasons =  Season('1979')..Season('2024')
 title   = 'Brazil (Brasil)'
+patch   = PatchBr.new
 
-repo = RsssfRepo.new( path, title: title )
+repo = RsssfRepo.new( path, title: title, 
+                            patch: patch )
 
 repo.prepare_pages( code, seasons )
-
-
-require_relative 'br_patch'
-repo.patch_pages( PatchBr.new )
 
 
 repo.make_pages_summary

@@ -5,6 +5,7 @@
 
 require_relative 'helper'
 
+require_relative 'es_patch'
 
 
 path = './tmp2/espana'
@@ -13,14 +14,14 @@ path = './tmp2/espana'
 code    = 'es'
 seasons = Season('2010/11')..Season('2023/24')
 title   = 'España (Spain)'  
+patch   = PatchEs.new 
 
 
-repo = RsssfRepo.new( path, title: title )
+repo = RsssfRepo.new( path, title: title,
+                            patch: patch )
 
 repo.prepare_pages( code, seasons )
 
-require_relative 'es_patch'
-repo.patch_pages( PatchEs.new )
 
 
 repo.make_pages_summary
